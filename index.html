@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Pauta de Evaluación de Equipos - Naturgy</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Custom Styles for Tablet & Custom Scrollbars -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      background-color: #f1f5f9;
+      user-select: none;
+    }
+
+    /* Naturgy Brand Colors */
+    .bg-naturgy-blue { background-color: #003863; }
+    .text-naturgy-blue { color: #003863; }
+    .border-naturgy-blue { border-color: #003863; }
+    .bg-naturgy-orange { background-color: #E05B00; }
+    .text-naturgy-orange { color: #E05B00; }
+    .border-naturgy-orange { border-color: #E05B00; }
+
+    /* Custom Table Styling */
+    .eval-table th, .eval-table td {
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Score selector buttons for touch optimization */
+    .score-btn {
+      transition: all 0.15s ease-in-out;
+    }
+    .score-btn.active {
+      background-color: #003863;
+      color: #ffffff;
+      font-weight: 700;
+      transform: scale(1.08);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Pulsing save indicator */
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .save-pulse {
+      animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Editable inline team names */
+    .editable-team-name:focus {
+      outline: 2px solid #E05B00;
+      background-color: #ffffff;
+      color: #0f172a;
+      border-radius: 4px;
+      padding: 2px 6px;
+    }
+
+    /* Smooth transitions for table cells */
+    .cell-score {
+      transition: background-color 0.2s ease;
+    }
+
+    /* Custom scrollbar for small tablets */
+    ::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between">
+
+  <!-- Top Navigation & Brand Header -->
+  <header class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      
+      <!-- Logo and App Title -->
+      <div class="flex items-center space-x-3">
+        <div class="flex flex-col">
+          <div class="flex items-center space-x-2">
+            <!-- Naturgy Logo Text Representation -->
+            <span class="text-2xl font-black tracking-tight text-naturgy-blue">Naturgy</span>
+            <svg class="w-6 h-6 text-naturgy-orange" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2L15 8L22 9L17 14L18.5 21L12 17.5L5.5 21L7 14L2 9L9 8L12 2Z" />
+            </svg>
+          </div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Pauta del Jurado</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons & Cache Status Indicator -->
+      <div class="flex items-center space-x-3">
+        
+        <!-- LocalStorage Cache Status Indicator -->
+        <div id="cache-status" class="hidden sm:flex items-center space-x-2 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-medium border border-emerald-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 save-pulse"></span>
+          <span id="cache-status-text">Guardado en caché</span>
+        </div>
+
+        <!-- Fullscreen Button -->
+        <button id="btn-fullscreen" onclick="toggleFullScreen()" title="Pantalla Completa" class="p-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition border border-slate-200 active:scale-95">
+          <i class="fa-solid fa-expand text-lg"></i>
+        </button>
+
+        <!-- Clear / Reset Scores Button -->
+        <button onclick="openResetModal()" class="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg transition active:scale-95">
+          <i class="fa-solid fa-rotate-left"></i>
+          <span class="hidden md:inline">Reiniciar</span>
+        </button>
+
+        <!-- Summary / Export Modal Button -->
+        <button onclick="openSummaryModal()" class="flex items-center space-x-1.5 px-3.5 py-2 text-xs font-bold text-white bg-naturgy-orange hover:bg-amber-600 rounded-lg shadow-sm transition active:scale-95">
+          <i class="fa-solid fa-award text-sm"></i>
+          <span>Resultados</span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-6 flex-grow w-full">
+    
+    <!-- Title & Instructions Banner -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-100 pb-3 mb-3">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-extrabold text-naturgy-blue tracking-tight uppercase">
+            Pauta de Evaluación de los Equipos
+          </h1>
+          <div class="w-16 h-1 bg-naturgy-orange rounded mt-1"></div>
+        </div>
+
+        <!-- Evaluator Name Input -->
+        <div class="flex items-center space-x-2 bg-slate-50 p-2 rounded-lg border border-slate-200 self-start md:self-auto">
+          <i class="fa-solid fa-user-pen text-slate-400 text-sm pl-1"></i>
+          <label for="evaluator-name" class="text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Jurado:</label>
+          <input type="text" id="evaluator-name" placeholder="Nombre del Evaluador" class="bg-transparent text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none w-36 sm:w-48" oninput="saveEvaluatorName(this.value)">
+        </div>
+      </div>
+
+      <!-- Instructions Subtitle -->
+      <p class="text-slate-600 text-xs sm:text-sm font-medium flex items-center">
+        <i class="fa-solid fa-circle-info text-naturgy-orange mr-2"></i>
+        Asigne un puntaje de <span class="font-bold text-slate-800 mx-1">0 a 5</span> en cada criterio. El resultado ponderado se calculará de forma automática.
+      </p>
+    </div>
+
+    <!-- Table Wrapper (Horizontal scrollable for small tablet screens) -->
+    <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden mb-6">
+      <div class="overflow-x-auto">
+        <table class="w-full eval-table border-collapse min-w-[768px]">
+          
+          <!-- Table Header -->
+          <thead>
+            <tr class="bg-naturgy-blue text-white text-xs sm:text-sm tracking-wide">
+              <th class="py-3.5 px-4 text-left font-bold w-1/4 uppercase">CRITERIO</th>
+              <th class="py-3.5 px-3 text-center font-bold w-20 uppercase">PESO</th>
+              
+              <!-- Team 1 Header -->
+              <th class="py-3.5 px-3 text-center font-bold w-1/5 relative group">
+                <div class="flex items-center justify-center space-x-1">
+                  <span id="team-name-0" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(0, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 1</span>
+                  <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
+                </div>
+                <div id="badge-rank-0" class="mt-1 hidden"></div>
+              </th>
+
+              <!-- Team 2 Header -->
+              <th class="py-3.5 px-3 text-center font-bold w-1/5 relative group">
+                <div class="flex items-center justify-center space-x-1">
+                  <span id="team-name-1" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(1, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 2</span>
+                  <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
+                </div>
+                <div id="badge-rank-1" class="mt-1 hidden"></div>
+              </th>
+
+              <!-- Team 3 Header -->
+              <th class="py-3.5 px-3 text-center font-bold w-1/5 relative group">
+                <div class="flex items-center justify-center space-x-1">
+                  <span id="team-name-2" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(2, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 3</span>
+                  <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
+                </div>
+                <div id="badge-rank-2" class="mt-1 hidden"></div>
+              </th>
+
+              <!-- Team 4 Header -->
+              <th class="py-3.5 px-3 text-center font-bold w-1/5 relative group">
+                <div class="flex items-center justify-center space-x-1">
+                  <span id="team-name-3" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(3, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 4</span>
+                  <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
+                </div>
+                <div id="badge-rank-3" class="mt-1 hidden"></div>
+              </th>
+            </tr>
+          </thead>
+
+          <!-- Table Body Dynamic Contents -->
+          <tbody id="evaluation-matrix-body" class="divide-y divide-slate-200 text-slate-700 text-sm">
+            <!-- Dynamic rows populated via JavaScript -->
+          </tbody>
+
+          <!-- Table Footer: PUNTAJE PONDERADO FINAL -->
+          <tfoot>
+            <tr class="bg-naturgy-orange text-white font-extrabold text-sm sm:text-base border-t-2 border-amber-600">
+              <td class="py-4 px-4 uppercase tracking-wider">
+                PUNTAJE PONDERADO FINAL
+              </td>
+              <td class="py-4 px-3 text-center font-black">
+                100%
+              </td>
+              
+              <!-- Team 1 Final Weighted Score -->
+              <td class="py-4 px-3 text-center bg-amber-600/20">
+                <div class="flex flex-col items-center justify-center">
+                  <div class="text-lg sm:text-xl tracking-tight">
+                    <span id="final-score-0" class="text-2xl font-black">0.00</span>
+                    <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
+                  </div>
+                  <span id="rank-subtext-0" class="text-[11px] font-bold uppercase tracking-wider text-amber-100 mt-0.5"></span>
+                </div>
+              </td>
+
+              <!-- Team 2 Final Weighted Score -->
+              <td class="py-4 px-3 text-center bg-amber-600/20">
+                <div class="flex flex-col items-center justify-center">
+                  <div class="text-lg sm:text-xl tracking-tight">
+                    <span id="final-score-1" class="text-2xl font-black">0.00</span>
+                    <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
+                  </div>
+                  <span id="rank-subtext-1" class="text-[11px] font-bold uppercase tracking-wider text-amber-100 mt-0.5"></span>
+                </div>
+              </td>
+
+              <!-- Team 3 Final Weighted Score -->
+              <td class="py-4 px-3 text-center bg-amber-600/20">
+                <div class="flex flex-col items-center justify-center">
+                  <div class="text-lg sm:text-xl tracking-tight">
+                    <span id="final-score-2" class="text-2xl font-black">0.00</span>
+                    <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
+                  </div>
+                  <span id="rank-subtext-2" class="text-[11px] font-bold uppercase tracking-wider text-amber-100 mt-0.5"></span>
+                </div>
+              </td>
+
+              <!-- Team 4 Final Weighted Score -->
+              <td class="py-4 px-3 text-center bg-amber-600/20">
+                <div class="flex flex-col items-center justify-center">
+                  <div class="text-lg sm:text-xl tracking-tight">
+                    <span id="final-score-3" class="text-2xl font-black">0.00</span>
+                    <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
+                  </div>
+                  <span id="rank-subtext-3" class="text-[11px] font-bold uppercase tracking-wider text-amber-100 mt-0.5"></span>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+
+        </table>
+      </div>
+    </div>
+
+    <!-- Rules & Tie-breaker Footer Note -->
+    <div class="bg-white rounded-lg p-4 border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-calculator text-naturgy-blue text-sm"></i>
+        <span><strong>Cálculo:</strong> Puntaje de criterio × peso decimal. Suma máxima: 5.0 puntos.</span>
+      </div>
+      <div class="flex items-center space-x-2 bg-amber-50 text-amber-800 px-3 py-1.5 rounded-md border border-amber-200">
+        <i class="fa-solid fa-scale-balanced text-amber-600 text-sm"></i>
+        <span><strong>Criterios de Desempate:</strong> 1º Sabor y equilibrio · 2º Presentación y creatividad</span>
+      </div>
+    </div>
+
+    <!-- Evaluator Observations / Notes Section -->
+    <div class="mt-4 bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+      <label for="evaluator-notes" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center">
+        <i class="fa-regular fa-comment-dots text-naturgy-orange mr-1.5 text-sm"></i>
+        Observaciones Generales / Comentarios del Jurado:
+      </label>
+      <textarea id="evaluator-notes" rows="2" placeholder="Escriba aquí observaciones adicionales sobre el desempeño de los equipos..." class="w-full text-xs sm:text-sm p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-naturgy-blue focus:outline-none text-slate-700 resize-y" oninput="saveNotes(this.value)"></textarea>
+    </div>
+
+  </main>
+
+  <!-- Footer Branding -->
+  <footer class="bg-slate-900 text-slate-400 text-xs py-3 px-4 mt-6 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+      <span class="font-semibold text-slate-300">Naturgy — Sistema de Evaluación de Equipos</span>
+      <span class="text-slate-500">Optimizado para Tablet & Web · Datos guardados automáticamente en caché local</span>
+    </div>
+  </footer>
+
+
+  <!-- MODAL 1: RESET CONFIRMATION -->
+  <div id="modal-reset" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform transition-all">
+      <div class="flex items-center space-x-3 text-rose-600 mb-4">
+        <div class="p-3 bg-rose-100 rounded-full">
+          <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">¿Reiniciar evaluación?</h3>
+      </div>
+      <p class="text-sm text-slate-600 mb-6">
+        Esta acción borrá todos los puntajes ingresados y restablecerá los valores a cero. Los datos guardados en la memoria del dispositivo también se borrarán.
+      </p>
+      <div class="flex items-center justify-end space-x-3">
+        <button onclick="closeResetModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition">
+          Cancelar
+        </button>
+        <button onclick="confirmReset()" class="px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm transition">
+          Sí, reiniciar todo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: RESULTS SUMMARY / LEADERBOARD -->
+  <div id="modal-summary" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 overflow-hidden">
+      
+      <!-- Summary Header -->
+      <div class="bg-naturgy-blue text-white p-5 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <i class="fa-solid fa-trophy text-amber-400 text-2xl"></i>
+          <div>
+            <h3 class="text-lg font-black uppercase tracking-wide">Resultados de Evaluación</h3>
+            <p id="summary-evaluator-label" class="text-xs text-slate-300">Jurado: No especificado</p>
+          </div>
+        </div>
+        <button onclick="closeSummaryModal()" class="text-slate-300 hover:text-white p-1 rounded-lg transition">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Summary Body (Ranking Cards) -->
+      <div id="summary-cards-container" class="p-6 overflow-y-auto space-y-3">
+        <!-- Rendered via JavaScript -->
+      </div>
+
+      <!-- Summary Footer Actions -->
+      <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+        <span class="text-xs text-slate-500 font-medium">Aplicado algoritmo de desempate oficial</span>
+        <button onclick="window.print()" class="px-4 py-2 text-xs font-bold text-naturgy-blue bg-white border border-naturgy-blue hover:bg-slate-100 rounded-lg transition flex items-center space-x-2">
+          <i class="fa-solid fa-print"></i>
+          <span>Imprimir / Guardar PDF</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- JavaScript Application Engine -->
+  <script>
+    // Evaluation Criteria Configuration according to the official matrix
+    const CRITERIA = [
+      { id: 'c1', name: 'Sabor y equilibrio', weight: 0.30, displayWeight: '30%' },
+      { id: 'c2', name: 'Presentación y creatividad', weight: 0.25, displayWeight: '25%' },
+      { id: 'c3', name: 'Uso estratégico de recursos', weight: 0.20, displayWeight: '20%' },
+      { id: 'c4', name: 'Relato estratégico', weight: 0.15, displayWeight: '15%' },
+      { id: 'c5', name: 'Trabajo en equipo', weight: 0.10, displayWeight: '10%' }
+    ];
+
+    const LOCAL_STORAGE_KEY = 'naturgy_pauta_evaluacion_v1';
+
+    // Initial State Template
+    const DEFAULT_STATE = {
+      evaluatorName: '',
+      notes: '',
+      teams: [
+        { id: 0, name: 'EQUIPO 1', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
+        { id: 1, name: 'EQUIPO 2', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
+        { id: 2, name: 'EQUIPO 3', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
+        { id: 3, name: 'EQUIPO 4', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } }
+      ]
+    };
+
+    let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStateFromCache();
+      renderTableBody();
+      updateCalculations();
+    });
+
+    /**
+     * Load state from browser localStorage if available
+     */
+    function loadStateFromCache() {
+      try {
+        const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && parsed.teams && parsed.teams.length === 4) {
+            appState = parsed;
+            showCacheNotification('Datos recuperados de caché');
+          }
+        }
+      } catch (e) {
+        console.warn('Error reading from localStorage:', e);
+      }
+
+      // Restore evaluator name and notes input
+      const evalInput = document.getElementById('evaluator-name');
+      if (evalInput) evalInput.value = appState.evaluatorName || '';
+
+      const notesInput = document.getElementById('evaluator-notes');
+      if (notesInput) notesInput.value = appState.notes || '';
+
+      // Restore team headers
+      appState.teams.forEach((team, index) => {
+        const nameEl = document.getElementById(`team-name-${index}`);
+        if (nameEl) nameEl.innerText = team.name || `EQUIPO ${index + 1}`;
+      });
+    }
+
+    /**
+     * Save current state to browser localStorage
+     */
+    function saveStateToCache() {
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(appState));
+        showCacheNotification('Guardado en caché');
+      } catch (e) {
+        console.warn('Error writing to localStorage:', e);
+      }
+    }
+
+    function showCacheNotification(msg) {
+      const statusEl = document.getElementById('cache-status');
+      const textEl = document.getElementById('cache-status-text');
+      if (textEl && statusEl) {
+        textEl.innerText = msg;
+        statusEl.classList.remove('hidden');
+      }
+    }
+
+    /**
+     * Render the table rows and score selectors (0 to 5 buttons for tablet touch)
+     */
+    function renderTableBody() {
+      const tbody = document.getElementById('evaluation-matrix-body');
+      tbody.innerHTML = '';
+
+      CRITERIA.forEach((criterion, rowIndex) => {
+        const tr = document.createElement('tr');
+        tr.className = rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50/50';
+
+        // Row Header (Criterion Name & Weight)
+        let rowHtml = `
+          <td class="py-3 px-4 font-semibold text-slate-800 text-xs sm:text-sm">
+            ${criterion.name}
+          </td>
+          <td class="py-3 px-3 text-center font-bold text-naturgy-orange text-xs sm:text-sm bg-slate-50">
+            ${criterion.displayWeight}
+          </td>
+        `;
+
+        // 4 Team Score Selectors for this Criterion
+        appState.teams.forEach((team, teamIndex) => {
+          const currentScore = team.scores[criterion.id];
+          
+          rowHtml += `
+            <td class="py-2.5 px-2 text-center cell-score" id="cell-${criterion.id}-${teamIndex}">
+              <div class="flex flex-col items-center justify-center space-y-1.5">
+                
+                <!-- Touch-friendly score buttons (0 to 5) -->
+                <div class="flex items-center justify-center space-x-1 sm:space-x-1.5">
+                  ${[0, 1, 2, 3, 4, 5].map(val => `
+                    <button 
+                      type="button" 
+                      onclick="setScore(${teamIndex}, '${criterion.id}', ${val})"
+                      class="score-btn w-6 h-7 sm:w-8 sm:h-8 rounded-md text-xs sm:text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 border border-slate-300 flex items-center justify-center active:scale-95 ${currentScore === val ? 'active' : ''}"
+                    >
+                      ${val}
+                    </button>
+                  `).join('')}
+                </div>
+
+                <!-- Score indicator display -->
+                <div class="text-[11px] font-medium text-slate-400">
+                  ${currentScore !== null && currentScore !== undefined ? `<span class="text-naturgy-blue font-bold text-xs">${currentScore}</span> / 5` : '___ / 5'}
+                </div>
+
+              </div>
+            </td>
+          `;
+        });
+
+        tr.innerHTML = rowHtml;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /**
+     * Set score for a team & criterion
+     */
+    function setScore(teamIndex, criterionId, scoreValue) {
+      // Toggle off if same value tapped again
+      if (appState.teams[teamIndex].scores[criterionId] === scoreValue) {
+        appState.teams[teamIndex].scores[criterionId] = null;
+      } else {
+        appState.teams[teamIndex].scores[criterionId] = scoreValue;
+      }
+
+      saveStateToCache();
+      renderTableBody();
+      updateCalculations();
+    }
+
+    /**
+     * Update team name
+     */
+    function updateTeamName(teamIndex, newName) {
+      const cleanName = newName.trim() || `EQUIPO ${teamIndex + 1}`;
+      appState.teams[teamIndex].name = cleanName;
+      saveStateToCache();
+      updateCalculations();
+    }
+
+    function preventEnterKey(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        e.target.blur();
+      }
+    }
+
+    function saveEvaluatorName(val) {
+      appState.evaluatorName = val;
+      saveStateToCache();
+    }
+
+    function saveNotes(val) {
+      appState.notes = val;
+      saveStateToCache();
+    }
+
+    /**
+     * Calculate total weighted scores and rank teams
+     */
+    function updateCalculations() {
+      // Calculate weighted scores for each team
+      const computedTeams = appState.teams.map((team, index) => {
+        let totalWeighted = 0;
+        let isComplete = true;
+
+        CRITERIA.forEach(crit => {
+          const score = team.scores[crit.id];
+          if (score !== null && score !== undefined) {
+            totalWeighted += score * crit.weight;
+          } else {
+            isComplete = false;
+          }
+        });
+
+        return {
+          index: index,
+          name: team.name,
+          totalWeighted: parseFloat(totalWeighted.toFixed(2)),
+          c1Score: team.scores['c1'] || 0, // 1st Tie-breaker: Sabor y equilibrio
+          c2Score: team.scores['c2'] || 0, // 2nd Tie-breaker: Presentación y creatividad
+          isComplete: isComplete
+        };
+      });
+
+      // Update total scores on table UI
+      computedTeams.forEach(ct => {
+        const scoreEl = document.getElementById(`final-score-${ct.index}`);
+        if (scoreEl) {
+          scoreEl.innerText = ct.totalWeighted.toFixed(2);
+        }
+      });
+
+      // Sort teams to determine Ranking with Tie-breaker Rules
+      // Rule 1: Highest total weighted score
+      // Rule 2: Highest score in "Sabor y equilibrio" (c1)
+      // Rule 3: Highest score in "Presentación y creatividad" (c2)
+      const sorted = [...computedTeams].sort((a, b) => {
+        if (b.totalWeighted !== a.totalWeighted) {
+          return b.totalWeighted - a.totalWeighted;
+        }
+        if (b.c1Score !== a.c1Score) {
+          return b.c1Score - a.c1Score; // Tie-breaker 1
+        }
+        return b.c2Score - a.c2Score;   // Tie-breaker 2
+      });
+
+      // Assign Rankings
+      const ranks = {};
+      sorted.forEach((teamObj, rankIndex) => {
+        ranks[teamObj.index] = rankIndex + 1;
+      });
+
+      // Update Rank Badges on Headers
+      computedTeams.forEach(ct => {
+        const rankPos = ranks[ct.index];
+        const badgeEl = document.getElementById(`badge-rank-${ct.index}`);
+        const subtextEl = document.getElementById(`rank-subtext-${ct.index}`);
+
+        if (badgeEl && subtextEl) {
+          if (ct.totalWeighted > 0) {
+            let badgeColor = 'bg-slate-200 text-slate-800';
+            let label = `${rankPos}º Lugar`;
+
+            if (rankPos === 1) badgeColor = 'bg-amber-400 text-amber-950 font-black';
+            else if (rankPos === 2) badgeColor = 'bg-slate-300 text-slate-900 font-bold';
+            else if (rankPos === 3) badgeColor = 'bg-amber-700/80 text-amber-100 font-bold';
+
+            badgeEl.className = `inline-block px-2 py-0.5 rounded-full text-[10px] uppercase font-bold shadow-sm ${badgeColor}`;
+            badgeEl.innerText = label;
+            badgeEl.classList.remove('hidden');
+
+            subtextEl.innerText = label;
+          } else {
+            badgeEl.classList.add('hidden');
+            subtextEl.innerText = '';
+          }
+        }
+      });
+
+      return { computedTeams, sorted, ranks };
+    }
+
+    /**
+     * Modal & Fullscreen Controls
+     */
+    function openResetModal() {
+      document.getElementById('modal-reset').classList.remove('hidden');
+    }
+
+    function closeResetModal() {
+      document.getElementById('modal-reset').classList.add('hidden');
+    }
+
+    function confirmReset() {
+      appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+      
+      const evalInput = document.getElementById('evaluator-name');
+      if (evalInput) evalInput.value = '';
+
+      const notesInput = document.getElementById('evaluator-notes');
+      if (notesInput) notesInput.value = '';
+
+      appState.teams.forEach((team, index) => {
+        const nameEl = document.getElementById(`team-name-${index}`);
+        if (nameEl) nameEl.innerText = `EQUIPO ${index + 1}`;
+      });
+
+      closeResetModal();
+      renderTableBody();
+      updateCalculations();
+      showCacheNotification('Evaluación reiniciada');
+    }
+
+    function openSummaryModal() {
+      const { sorted } = updateCalculations();
+      const container = document.getElementById('summary-cards-container');
+      const evalLabel = document.getElementById('summary-evaluator-label');
+
+      if (evalLabel) {
+        evalLabel.innerText = appState.evaluatorName ? `Jurado: ${appState.evaluatorName}` : 'Jurado: No especificado';
+      }
+
+      container.innerHTML = '';
+
+      sorted.forEach((team, pos) => {
+        const rankNumber = pos + 1;
+        let trophyIcon = 'fa-medal text-slate-400';
+        let cardBorder = 'border-slate-200 bg-white';
+        let badgeBg = 'bg-slate-100 text-slate-700';
+
+        if (rankNumber === 1) {
+          trophyIcon = 'fa-trophy text-amber-500 text-2xl';
+          cardBorder = 'border-amber-400 bg-amber-50/40 ring-2 ring-amber-400/30';
+          badgeBg = 'bg-amber-400 text-amber-950 font-black';
+        } else if (rankNumber === 2) {
+          trophyIcon = 'fa-medal text-slate-400 text-xl';
+          cardBorder = 'border-slate-300 bg-slate-50/50';
+          badgeBg = 'bg-slate-300 text-slate-800 font-bold';
+        } else if (rankNumber === 3) {
+          trophyIcon = 'fa-award text-amber-700 text-xl';
+          cardBorder = 'border-amber-200 bg-white';
+          badgeBg = 'bg-amber-700 text-amber-50 font-bold';
+        }
+
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-xl border ${cardBorder} flex items-center justify-between transition`;
+
+        card.innerHTML = `
+          <div class="flex items-center space-x-4">
+            <div class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100">
+              <i class="fa-solid ${trophyIcon}"></i>
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-base font-extrabold text-slate-900">${team.name}</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] ${badgeBg}">${rankNumber}º Lugar</span>
+              </div>
+              <div class="text-xs text-slate-500 mt-0.5">
+                Desglose: Sabor (${team.c1Score}/5) · Presentación (${team.c2Score}/5)
+              </div>
+            </div>
+          </div>
+
+          <div class="text-right">
+            <span class="text-2xl font-black text-naturgy-blue">${team.totalWeighted.toFixed(2)}</span>
+            <span class="text-xs font-semibold text-slate-400">/ 5.0</span>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      document.getElementById('modal-summary').classList.remove('hidden');
+    }
+
+    function closeSummaryModal() {
+      document.getElementById('modal-summary').classList.add('hidden');
+    }
+
+    /**
+     * Fullscreen toggle logic for Tablet presentation
+     */
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Error attempting to enable fullscreen: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
