@@ -16,9 +16,6 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- HTML5 QR Code Scanner Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-
   <!-- Custom Styles for Tablet & Custom Scrollbars -->
   <style>
     body {
@@ -283,18 +280,6 @@
       </div>
     </div>
 
-    <!-- Rules & Tie-breaker Footer Note -->
-    <div class="bg-white rounded-lg p-4 border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs text-slate-500">
-      <div class="flex items-center space-x-2">
-        <i class="fa-solid fa-calculator text-naturgy-blue text-sm"></i>
-        <span><strong>Cálculo:</strong> Puntaje de criterio × peso decimal. Suma máxima: 5.0 puntos.</span>
-      </div>
-      <div class="flex items-center space-x-2 bg-amber-50 text-amber-800 px-3 py-1.5 rounded-md border border-amber-200">
-        <i class="fa-solid fa-scale-balanced text-amber-600 text-sm"></i>
-        <span><strong>Criterios de Desempate:</strong> 1º Sabor y equilibrio · 2º Presentación y creatividad</span>
-      </div>
-    </div>
-
   </main>
 
   <!-- Footer Branding -->
@@ -412,8 +397,7 @@
     </div>
   </div>
 
-
-  <!-- MODAL 4: PANEL CONSOLIDADO & CONFIGURACIÓN GOOGLE SHEETS -->
+  <!-- MODAL 4: PANEL CONSOLIDADO -->
   <div id="modal-consolidated" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 overflow-hidden">
       
@@ -431,24 +415,16 @@
         </button>
       </div>
 
-      <!-- Config & Tabs Bar -->
-      <div class="bg-slate-100 border-b border-slate-200 px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Action Bar -->
+      <div class="bg-slate-100 border-b border-slate-200 px-6 py-3 flex items-center justify-between gap-3">
         <div class="flex items-center space-x-2">
-          <button onclick="switchPanelTab('results')" id="tab-btn-results" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-naturgy-blue shadow-sm border border-slate-200">
-            <i class="fa-solid fa-list-check mr-1"></i> Evaluaciones Recibidas
-          </button>
-          <button onclick="switchPanelTab('settings')" id="tab-btn-settings" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-white/60">
-            <i class="fa-solid fa-gear mr-1"></i> Configurar Google Sheets
-          </button>
+          <span class="text-xs font-bold text-slate-700 flex items-center">
+            <i class="fa-solid fa-list-check text-naturgy-blue mr-1.5"></i> Evaluaciones Recibidas
+          </span>
         </div>
-
-        <button onclick="exportConsolidatedToCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow-sm transition flex items-center space-x-1.5">
-          <i class="fa-solid fa-file-excel"></i>
-          <span>Exportar a Excel / Google Sheets (CSV)</span>
-        </button>
       </div>
 
-      <!-- Tab Content 1: Submissions Table -->
+      <!-- Content: Submissions Table & Live Podium -->
       <div id="tab-content-results" class="p-6 overflow-y-auto flex-grow space-y-4">
         
         <!-- Live Averaged Podium Section across all Jurados -->
@@ -473,74 +449,6 @@
             </tbody>
           </table>
         </div>
-      </div>
-
-      <!-- Tab Content 2: Google Sheets Setup Guide -->
-      <div id="tab-content-settings" class="p-6 overflow-y-auto flex-grow space-y-4 hidden text-xs text-slate-700">
-        
-        <!-- Webhook Configuration Section with QR Scanner & Generator -->
-        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-4">
-          <div class="flex items-center justify-between flex-wrap gap-2">
-            <div>
-              <h4 class="font-bold text-amber-900 text-sm flex items-center space-x-2">
-                <i class="fa-solid fa-plug text-amber-600"></i>
-                <span>URL de Webhook de Google Sheets</span>
-              </h4>
-              <p class="text-amber-800 text-xs mt-0.5">
-                Ingresa la URL pegando el enlace manualmente o escaneando un código QR con la cámara de la tablet.
-              </p>
-            </div>
-            
-            <!-- Scanner Action Buttons -->
-            <div class="flex items-center space-x-2">
-              <button id="btn-start-qr" onclick="startQRScanner()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg transition flex items-center space-x-1.5 shadow-sm active:scale-95">
-                <i class="fa-solid fa-qrcode"></i>
-                <span>Escanear QR con Cámara</span>
-              </button>
-              <button id="btn-stop-qr" onclick="stopQRScanner()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-lg transition flex items-center space-x-1.5 shadow-sm hidden active:scale-95">
-                <i class="fa-solid fa-video-slash"></i>
-                <span>Detener Escáner</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Live Camera Video Feed for QR Scanning -->
-          <div id="qr-reader-wrapper" class="hidden flex flex-col items-center justify-center p-3 bg-slate-900 rounded-xl border-2 border-dashed border-amber-400">
-            <span class="text-amber-300 font-bold text-xs mb-2 flex items-center">
-              <i class="fa-solid fa-camera mr-1.5 animate-pulse"></i>
-              Apunta la cámara de la tablet al Código QR del Webhook
-            </span>
-            <div id="qr-reader" class="w-full max-w-sm rounded-lg overflow-hidden bg-black"></div>
-          </div>
-
-          <!-- Manual Link Input -->
-          <div class="space-y-1.5">
-            <label for="sheets-webhook-url" class="font-bold text-amber-950 text-xs uppercase">Enlace Webhook de Google Apps Script:</label>
-            <div class="flex gap-2">
-              <input type="url" id="sheets-webhook-url" placeholder="https://script.google.com/macros/s/.../exec" class="flex-grow p-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-naturgy-blue text-xs font-mono shadow-inner" oninput="updateQRPreview(this.value)">
-              <button onclick="saveSheetsWebhookUrl()" class="px-4 py-2 bg-naturgy-blue text-white font-bold rounded-lg hover:bg-blue-900 transition shrink-0 flex items-center space-x-1">
-                <i class="fa-solid fa-floppy-disk"></i>
-                <span>Guardar URL</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Share QR Box (Shows QR Code of saved URL for other tablets to scan) -->
-          <div id="qr-share-box" class="hidden pt-3 border-t border-amber-200/80 flex items-center justify-between bg-white/80 p-3 rounded-lg border border-amber-100">
-            <div class="space-y-1 max-w-[70%]">
-              <span class="font-bold text-slate-800 text-xs flex items-center">
-                <i class="fa-solid fa-share-nodes text-naturgy-blue mr-1.5"></i>
-                Código QR para vincular otros dispositivos
-              </span>
-              <p class="text-[11px] text-slate-500">Puedes mostrar este código QR en pantalla para configurar los demás dispositivos de los jurados al instante sin escribir nada.</p>
-            </div>
-            <div class="bg-white p-1.5 border border-slate-200 rounded-lg shadow-sm shrink-0">
-              <img id="qr-share-img" src="" alt="Código QR Webhook" class="w-20 h-20">
-            </div>
-          </div>
-
-        </div>
-
       </div>
 
     </div>
@@ -622,6 +530,9 @@
 
   <!-- JavaScript Application Engine -->
   <script>
+    // URL Webhook de Google Sheets integrada directamente
+    const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwXx5JJnJXEvDK-aO-lD32Qi4ns6843mHp0nM6FMMBTa3qRgIqdl9neyqWxF61XUCvT/exec';
+
     // Evaluation Criteria Configuration according to the official matrix
     const CRITERIA = [
       { id: 'c1', name: 'Sabor y equilibrio', weight: 0.30, displayWeight: '30%' },
@@ -632,7 +543,6 @@
     ];
 
     const LOCAL_STORAGE_KEY = 'naturgy_pauta_evaluacion_v1';
-    const WEBHOOK_URL_KEY = 'naturgy_sheets_webhook_url';
 
     // Initial State Template
     const DEFAULT_STATE = {
@@ -649,119 +559,11 @@
     let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
     window.allSubmissions = [];
 
-    // QR Code Scanner Object Reference
-    let html5QrScanner = null;
-
     window.addEventListener('DOMContentLoaded', () => {
       loadStateFromCache();
       renderTableBody();
       updateCalculations();
-
-      const webhookInput = document.getElementById('sheets-webhook-url');
-      if (webhookInput) {
-        const savedUrl = localStorage.getItem(WEBHOOK_URL_KEY) || '';
-        webhookInput.value = savedUrl;
-        updateQRPreview(savedUrl);
-      }
     });
-
-    /**
-     * Start Camera & Read Webhook URL QR Code
-     */
-    function startQRScanner() {
-      const readerWrapper = document.getElementById('qr-reader-wrapper');
-      const startBtn = document.getElementById('btn-start-qr');
-      const stopBtn = document.getElementById('btn-stop-qr');
-
-      if (!readerWrapper || !startBtn || !stopBtn) return;
-
-      readerWrapper.classList.remove('hidden');
-      startBtn.classList.add('hidden');
-      stopBtn.classList.remove('hidden');
-
-      if (typeof Html5Qrcode === 'undefined') {
-        showToast('Error cargando lector de código QR. Compruebe la conexión a internet.', 'error');
-        stopQRScanner();
-        return;
-      }
-
-      if (!html5QrScanner) {
-        html5QrScanner = new Html5Qrcode("qr-reader");
-      }
-
-      const qrSuccessCallback = (decodedText) => {
-        if (decodedText && (decodedText.startsWith('http://') || decodedText.startsWith('https://'))) {
-          const input = document.getElementById('sheets-webhook-url');
-          if (input) {
-            input.value = decodedText.trim();
-            saveSheetsWebhookUrl();
-            updateQRPreview(decodedText.trim());
-          }
-          showToast('¡Código QR escaneado y URL guardada con éxito!', 'success');
-          stopQRScanner();
-        } else {
-          showToast('El código QR escaneado no contiene una URL válida.', 'error');
-        }
-      };
-
-      const qrConfig = { fps: 10, qrbox: { width: 220, height: 220 } };
-
-      html5QrScanner.start({ facingMode: "environment" }, qrConfig, qrSuccessCallback)
-        .catch(() => {
-          html5QrScanner.start({ facingMode: "user" }, qrConfig, qrSuccessCallback)
-            .catch((err) => {
-              console.warn("No se pudo iniciar la cámara:", err);
-              showToast("No se pudo acceder a la cámara. Revisa los permisos en tu navegador.", "error");
-              stopQRScanner();
-            });
-        });
-    }
-
-    /**
-     * Stop Camera Scanner
-     */
-    function stopQRScanner() {
-      const readerWrapper = document.getElementById('qr-reader-wrapper');
-      const startBtn = document.getElementById('btn-start-qr');
-      const stopBtn = document.getElementById('btn-stop-qr');
-
-      if (html5QrScanner) {
-        html5QrScanner.stop().then(() => {
-          if (readerWrapper) readerWrapper.classList.add('hidden');
-          if (startBtn) startBtn.classList.remove('hidden');
-          if (stopBtn) stopBtn.classList.add('hidden');
-        }).catch((err) => {
-          console.warn("Error cerrando la cámara:", err);
-          if (readerWrapper) readerWrapper.classList.add('hidden');
-          if (startBtn) startBtn.classList.remove('hidden');
-          if (stopBtn) stopBtn.classList.add('hidden');
-        });
-      } else {
-        if (readerWrapper) readerWrapper.classList.add('hidden');
-        if (startBtn) startBtn.classList.remove('hidden');
-        if (stopBtn) stopBtn.classList.add('hidden');
-      }
-    }
-
-    function saveSheetsWebhookUrl() {
-      const url = document.getElementById('sheets-webhook-url').value.trim();
-      localStorage.setItem(WEBHOOK_URL_KEY, url);
-      updateQRPreview(url);
-      showToast('URL de Webhook guardada exitosamente.', 'success');
-    }
-
-    function updateQRPreview(url) {
-      const shareBox = document.getElementById('qr-share-box');
-      const shareImg = document.getElementById('qr-share-img');
-      if (!shareBox || !shareImg) return;
-
-      if (url && url.startsWith('http')) {
-        shareImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}`;
-        shareBox.classList.remove('hidden');
-      } else {
-        shareBox.classList.add('hidden');
-      }
-    }
 
     /**
      * Show UI Toast Notification (replaces alert)
@@ -1075,11 +877,10 @@
         await window.saveEvaluationToCloud(payload);
       }
 
-      // 2. Send to Google Sheets Webhook URL if configured
-      const webhookUrl = localStorage.getItem(WEBHOOK_URL_KEY);
-      if (webhookUrl && webhookUrl.startsWith('http')) {
+      // 2. Send to Integrated Google Sheets Webhook URL
+      if (GOOGLE_SHEETS_WEBHOOK_URL && GOOGLE_SHEETS_WEBHOOK_URL.startsWith('http')) {
         try {
-          await fetch(webhookUrl, {
+          await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
@@ -1117,33 +918,7 @@
     }
 
     function closeConsolidatedModal() {
-      stopQRScanner();
       document.getElementById('modal-consolidated').classList.add('hidden');
-    }
-
-    function switchPanelTab(tab) {
-      const resultsTab = document.getElementById('tab-content-results');
-      const settingsTab = document.getElementById('tab-content-settings');
-      const btnResults = document.getElementById('tab-btn-results');
-      const btnSettings = document.getElementById('tab-btn-settings');
-
-      if (tab === 'results') {
-        resultsTab.classList.remove('hidden');
-        settingsTab.classList.add('hidden');
-        btnResults.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-naturgy-blue shadow-sm border border-slate-200";
-        btnSettings.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-white/60";
-      } else {
-        resultsTab.classList.add('hidden');
-        settingsTab.classList.remove('hidden');
-        btnSettings.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-naturgy-blue shadow-sm border border-slate-200";
-        btnResults.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-white/60";
-      }
-    }
-
-    function saveSheetsWebhookUrl() {
-      const url = document.getElementById('sheets-webhook-url').value.trim();
-      localStorage.setItem(WEBHOOK_URL_KEY, url);
-      showToast('URL de Webhook guardada exitosamente.', 'success');
     }
 
     function renderConsolidatedTable() {
