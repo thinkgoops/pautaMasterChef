@@ -60,15 +60,6 @@
       animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
-    /* Editable inline team names */
-    .editable-team-name:focus {
-      outline: 2px solid #E05B00;
-      background-color: #ffffff;
-      color: #0f172a;
-      border-radius: 4px;
-      padding: 2px 6px;
-    }
-
     /* Smooth transitions for table cells */
     .cell-score {
       transition: background-color 0.2s ease;
@@ -170,11 +161,11 @@
       <!-- Instructions Subtitle -->
       <p class="text-slate-600 text-xs sm:text-sm font-medium flex items-center">
         <i class="fa-solid fa-circle-info text-naturgy-orange mr-2"></i>
-        Asigne un puntaje de <span class="font-bold text-slate-800 mx-1">0 a 5</span> en cada criterio. El resultado ponderado se calculará de forma automática.
+        Asigne un puntaje de <span class="font-bold text-slate-800 mx-1">1 a 5</span> en cada criterio. El resultado ponderado se calculará de forma automática.
       </p>
     </div>
 
-    <!-- Table Wrapper (Horizontal scrollable for small tablet screens) -->
+    <!-- Table Wrapper -->
     <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden mb-6">
       <div class="overflow-x-auto">
         <table class="w-full eval-table border-collapse min-w-[768px]">
@@ -185,36 +176,20 @@
               <th class="py-3.5 px-4 text-left font-bold w-1/4 uppercase">CRITERIO</th>
               <th class="py-3.5 px-3 text-center font-bold w-20 uppercase">PESO</th>
               
-              <!-- Team 1 Header -->
-              <th class="py-3.5 px-3 text-center font-bold w-1/5 relative group">
-                <div class="flex items-center justify-center space-x-1">
-                  <span id="team-name-0" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(0, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 1</span>
-                  <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
-                </div>
+              <th class="py-3.5 px-3 text-center font-bold w-1/5">
+                <span id="team-name-0" class="font-bold">EQUIPO 1</span>
               </th>
 
-              <!-- Team 2 Header -->
-              <th class="py-3.5 px-3 text-center font-bold w-1/5 relative group">
-                <div class="flex items-center justify-center space-x-1">
-                  <span id="team-name-1" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(1, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 2</span>
-                  <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
-                </div>
+              <th class="py-3.5 px-3 text-center font-bold w-1/5">
+                <span id="team-name-1" class="font-bold">EQUIPO 2</span>
               </th>
 
-              <!-- Team 3 Header -->
-              <th class="py-3.5 px-3 text-center font-bold w-1/5 relative group">
-                <div class="flex items-center justify-center space-x-1">
-                  <span id="team-name-2" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(2, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 3</span>
-                  <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
-                </div>
+              <th class="py-3.5 px-3 text-center font-bold w-1/5">
+                <span id="team-name-2" class="font-bold">EQUIPO 3</span>
               </th>
 
-              <!-- Team 4 Header -->
-              <th class="py-3.5 px-3 text-center font-bold w-1/5 relative group">
-                <div class="flex items-center justify-center space-x-1">
-                  <span id="team-name-3" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(3, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 4</span>
-                  <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
-                </div>
+              <th class="py-3.5 px-3 text-center font-bold w-1/5">
+                <span id="team-name-3" class="font-bold">EQUIPO 4</span>
               </th>
             </tr>
           </thead>
@@ -286,7 +261,7 @@
   <footer class="bg-slate-900 text-slate-400 text-xs py-3 px-4 mt-6 border-t border-slate-800">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
       <span class="font-semibold text-slate-300">Naturgy — Sistema de Evaluación de Equipos</span>
-      <span class="text-slate-500">Sincronización Multi-dispositivo & Envío Centralizado a Hoja de Cálculo</span>
+      <span class="text-slate-500">Sincronización Multi-dispositivo & Envío Centralizado</span>
     </div>
   </footer>
 
@@ -300,7 +275,7 @@
         <h3 class="text-lg font-bold text-slate-900">¿Reiniciar evaluación?</h3>
       </div>
       <p class="text-sm text-slate-600 mb-6">
-        Esta acción borrá todos los puntajes ingresados y restablecerá los valores a cero. Los datos guardados en la memoria del dispositivo también se borrarán.
+        Esta acción borrará todos los puntajes ingresados y restablecerá los valores a cero. Los datos guardados en la memoria del dispositivo también se borrarán.
       </p>
       <div class="flex items-center justify-end space-x-3">
         <button onclick="closeResetModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition">
@@ -331,7 +306,7 @@
         </button>
       </div>
 
-      <!-- Summary Body (Ranking Cards) -->
+      <!-- Summary Body -->
       <div id="summary-cards-container" class="p-6 overflow-y-auto space-y-3">
         <!-- Rendered via JavaScript -->
       </div>
@@ -347,7 +322,6 @@
 
     </div>
   </div>
-
 
   <!-- MODAL 3: ENVIAR RESULTADOS -->
   <div id="modal-submit" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -422,12 +396,16 @@
             <i class="fa-solid fa-list-check text-naturgy-blue mr-1.5"></i> Evaluaciones Recibidas
           </span>
         </div>
+        <button onclick="refreshConsolidatedData()" class="flex items-center space-x-1.5 px-3 py-1.5 bg-white text-naturgy-blue hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold shadow-sm transition active:scale-95">
+          <i id="refresh-icon" class="fa-solid fa-rotate"></i>
+          <span>Actualizar Resultados</span>
+        </button>
       </div>
 
       <!-- Content: Submissions Table & Live Podium -->
       <div id="tab-content-results" class="p-6 overflow-y-auto flex-grow space-y-4">
         
-        <!-- Live Averaged Podium Section across all Jurados -->
+        <!-- Live Averaged Podium Section -->
         <div id="consolidated-ranking-container">
           <!-- Rendered via JS -->
         </div>
@@ -461,7 +439,6 @@
       <span id="toast-message">Notificación</span>
     </div>
   </div>
-
 
   <!-- Firebase Integration & Webhook Logic Script -->
   <script type="module">
@@ -503,10 +480,13 @@
         snapshot.forEach(docSnap => {
           submittedEvaluations.push({ id: docSnap.id, ...docSnap.data() });
         });
-        // Sort newest first
         submittedEvaluations.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         window.allSubmissions = submittedEvaluations;
-        renderConsolidatedTable();
+        
+        // Safely invoke renderConsolidatedTable if defined
+        if (typeof window.renderConsolidatedTable === 'function') {
+          window.renderConsolidatedTable();
+        }
       }, (error) => {
         console.warn("Error leyendo envíos de la nube:", error);
       });
@@ -516,7 +496,6 @@
     window.saveEvaluationToCloud = async function(payload) {
       if (!db) return false;
       try {
-        // Document ID derived from evaluator name to automatically overwrite
         const docId = payload.evaluatorName.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
         const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'evaluations', docId);
         await setDoc(docRef, payload);
@@ -533,7 +512,7 @@
     // URL Webhook de Google Sheets integrada directamente
     const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwXx5JJnJXEvDK-aO-lD32Qi4ns6843mHp0nM6FMMBTa3qRgIqdl9neyqWxF61XUCvT/exec';
 
-    // Evaluation Criteria Configuration according to the official matrix
+    // Evaluation Criteria Configuration
     const CRITERIA = [
       { id: 'c1', name: 'Sabor y equilibrio', weight: 0.30, displayWeight: '30%' },
       { id: 'c2', name: 'Presentación y creatividad', weight: 0.25, displayWeight: '25%' },
@@ -566,7 +545,7 @@
     });
 
     /**
-     * Show UI Toast Notification (replaces alert)
+     * Show UI Toast Notification
      */
     function showToast(message, type = 'info') {
       const toast = document.getElementById('toast-notification');
@@ -615,11 +594,9 @@
         console.warn('Error reading from localStorage:', e);
       }
 
-      // Restore evaluator name and notes input
       const evalInput = document.getElementById('evaluator-name');
       if (evalInput) evalInput.value = appState.evaluatorName || '';
 
-      // Restore team headers
       appState.teams.forEach((team, index) => {
         const nameEl = document.getElementById(`team-name-${index}`);
         if (nameEl) nameEl.innerText = team.name || `EQUIPO ${index + 1}`;
@@ -648,7 +625,7 @@
     }
 
     /**
-     * Render the table rows and score selectors (0 to 5 buttons for tablet touch)
+     * Render the table rows and score selectors (1 to 5 buttons for tablet touch)
      */
     function renderTableBody() {
       const tbody = document.getElementById('evaluation-matrix-body');
@@ -658,7 +635,6 @@
         const tr = document.createElement('tr');
         tr.className = rowIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50/50';
 
-        // Row Header (Criterion Name & Weight)
         let rowHtml = `
           <td class="py-3 px-4 font-semibold text-slate-800 text-xs sm:text-sm">
             ${criterion.name}
@@ -668,7 +644,6 @@
           </td>
         `;
 
-        // 4 Team Score Selectors for this Criterion
         appState.teams.forEach((team, teamIndex) => {
           const currentScore = team.scores[criterion.id];
           
@@ -676,9 +651,9 @@
             <td class="py-2.5 px-2 text-center cell-score" id="cell-${criterion.id}-${teamIndex}">
               <div class="flex flex-col items-center justify-center space-y-1.5">
                 
-                <!-- Touch-friendly score buttons (0 to 5) -->
+                <!-- Touch-friendly score buttons (1 to 5) -->
                 <div class="flex items-center justify-center space-x-1 sm:space-x-1.5">
-                  ${[0, 1, 2, 3, 4, 5].map(val => `
+                  ${[1, 2, 3, 4, 5].map(val => `
                     <button 
                       type="button" 
                       onclick="setScore(${teamIndex}, '${criterion.id}', ${val})"
@@ -719,23 +694,6 @@
       updateCalculations();
     }
 
-    /**
-     * Update team name
-     */
-    function updateTeamName(teamIndex, newName) {
-      const cleanName = newName.trim() || `EQUIPO ${teamIndex + 1}`;
-      appState.teams[teamIndex].name = cleanName;
-      saveStateToCache();
-      updateCalculations();
-    }
-
-    function preventEnterKey(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        e.target.blur();
-      }
-    }
-
     function saveEvaluatorName(val) {
       appState.evaluatorName = val;
       const evalInput = document.getElementById('evaluator-name');
@@ -746,7 +704,7 @@
     }
 
     /**
-     * Calculate total weighted scores and rank teams
+     * Calculate total weighted scores
      */
     function updateCalculations() {
       const computedTeams = appState.teams.map((team, index) => {
@@ -796,7 +754,6 @@
 
       return { computedTeams, sorted, ranks };
     }
-
 
     /**
      * Submit Results Modal Controls
@@ -865,14 +822,14 @@
         team1_score: computedTeams[0].totalWeighted,
         team2_name: computedTeams[1].name,
         team2_score: computedTeams[1].totalWeighted,
-        team3_name: computedTeams[2].name,
+        team3_name: computedTeams[3] ? computedTeams[2].name : 'EQUIPO 3',
         team3_score: computedTeams[2].totalWeighted,
-        team4_name: computedTeams[3].name,
+        team4_name: computedTeams[3] ? computedTeams[3].name : 'EQUIPO 4',
         team4_score: computedTeams[3].totalWeighted,
         rawScores: appState.teams
       };
 
-      // 1. Send to Firestore Cloud Centralized Database (Overwrites by docId)
+      // 1. Send to Firestore Cloud Centralized Database
       if (window.saveEvaluationToCloud) {
         await window.saveEvaluationToCloud(payload);
       }
@@ -891,7 +848,7 @@
         }
       }
 
-      // 3. Update local submissions buffer (Overwrite if evaluator exists)
+      // 3. Update local submissions buffer
       const existingIdx = window.allSubmissions.findIndex(s => 
         (s.evaluatorName || '').trim().toLowerCase() === evalName.toLowerCase()
       );
@@ -905,7 +862,7 @@
       setTimeout(() => {
         spinner.classList.add('hidden');
         closeSubmitModal();
-        showToast(`✅ Evaluación de "${evalName}" registrada/sobrescrita con éxito`, 'success');
+        showToast(`✅ Evaluación de "${evalName}" registrada con éxito`, 'success');
       }, 800);
     }
 
@@ -921,6 +878,54 @@
       document.getElementById('modal-consolidated').classList.add('hidden');
     }
 
+    async function refreshConsolidatedData() {
+      const icon = document.getElementById('refresh-icon');
+      if (icon) icon.classList.add('fa-spin');
+
+      let fetchedFromSheet = false;
+
+      if (GOOGLE_SHEETS_WEBHOOK_URL && GOOGLE_SHEETS_WEBHOOK_URL.startsWith('http') && !GOOGLE_SHEETS_WEBHOOK_URL.includes('TU_SCRIPT_ID')) {
+        try {
+          const response = await fetch(GOOGLE_SHEETS_WEBHOOK_URL);
+          if (response.ok) {
+            const data = await response.json();
+            if (Array.isArray(data) && data.length > 0) {
+              window.allSubmissions = data;
+              fetchedFromSheet = true;
+            }
+          }
+        } catch (err) {
+          console.warn("No se pudo leer directamente de Google Sheets:", err);
+        }
+      }
+
+      if (!fetchedFromSheet && window.cloudDb) {
+        try {
+          const { collection, getDocs } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+          const colRef = collection(window.cloudDb, 'artifacts', window.cloudAppId, 'public', 'data', 'evaluations');
+          const snapshot = await getDocs(colRef);
+          const subs = [];
+          snapshot.forEach(docSnap => {
+            subs.push({ id: docSnap.id, ...docSnap.data() });
+          });
+          subs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+          window.allSubmissions = subs;
+        } catch (e) {
+          console.warn("Error refrescando datos de Firestore:", e);
+        }
+      }
+
+      renderConsolidatedTable();
+
+      setTimeout(() => {
+        if (icon) icon.classList.remove('fa-spin');
+        showToast("Resultados sincronizados con la Hoja de Cálculo.", "success");
+      }, 400);
+    }
+
+    /**
+     * Render Consolidated Table & Static Cards Grid
+     */
     function renderConsolidatedTable() {
       const tbody = document.getElementById('consolidated-table-body');
       const rankingContainer = document.getElementById('consolidated-ranking-container');
@@ -945,7 +950,6 @@
         return;
       }
 
-      // Calculate Averages across all submitted evaluations
       const totalCount = window.allSubmissions.length;
       const latestSub = window.allSubmissions[0];
       
@@ -967,10 +971,14 @@
         t.avgScore = parseFloat((t.totalScore / totalCount).toFixed(2));
       });
 
-      // Sort teams by average score descending
-      const sortedTeams = [...teamStats].sort((a, b) => b.avgScore - a.avgScore);
+      // Calculate ranks based on scores
+      const sortedForRank = [...teamStats].sort((a, b) => b.avgScore - a.avgScore);
+      const ranksMap = {};
+      sortedForRank.forEach((team, idx) => {
+        ranksMap[team.id] = idx + 1;
+      });
 
-      // Render Real-time Averaged Podium Section
+      // Render Real-time Averaged Podium Section with FIXED order (Equipo 1, 2, 3, 4)
       if (rankingContainer) {
         let rankingHtml = `
           <div class="bg-gradient-to-r from-slate-900 via-naturgy-blue to-slate-900 text-white rounded-xl p-4 shadow-md border border-slate-700">
@@ -988,8 +996,8 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
         `;
 
-        sortedTeams.forEach((team, idx) => {
-          const rank = idx + 1;
+        teamStats.forEach((team) => {
+          const rank = ranksMap[team.id];
           let badgeClass = 'bg-slate-700 text-slate-300 border-slate-600';
           let trophyIcon = 'fa-medal text-slate-400';
           let borderGlow = 'border-slate-700/50 bg-slate-800/60';
@@ -1038,52 +1046,17 @@
         tr.innerHTML = `
           <td class="p-3 text-slate-500">${sub.timestamp || '-'}</td>
           <td class="p-3 font-bold text-slate-800">${sub.evaluatorName || 'Jurado Anónimo'}</td>
-          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team1_score !== undefined ? sub.team1_score.toFixed(2) : '-'}</td>
-          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team2_score !== undefined ? sub.team2_score.toFixed(2) : '-'}</td>
-          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team3_score !== undefined ? sub.team3_score.toFixed(2) : '-'}</td>
-          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team4_score !== undefined ? sub.team4_score.toFixed(2) : '-'}</td>
+          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team1_score !== undefined ? Number(sub.team1_score).toFixed(2) : '-'}</td>
+          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team2_score !== undefined ? Number(sub.team2_score).toFixed(2) : '-'}</td>
+          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team3_score !== undefined ? Number(sub.team3_score).toFixed(2) : '-'}</td>
+          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team4_score !== undefined ? Number(sub.team4_score).toFixed(2) : '-'}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    /**
-     * Export All Submissions to CSV for Excel / Google Sheets
-     */
-    function exportConsolidatedToCSV() {
-      if (!window.allSubmissions || window.allSubmissions.length === 0) {
-        showToast("No hay envíos registrados para exportar.", "error");
-        return;
-      }
-
-      let csvContent = "data:text/csv;charset=utf-8,";
-      csvContent += "Fecha,Jurado,Equipo 1,Puntaje Eq 1,Equipo 2,Puntaje Eq 2,Equipo 3,Puntaje Eq 3,Equipo 4,Puntaje Eq 4\n";
-
-      window.allSubmissions.forEach(sub => {
-        const row = [
-          `"${sub.timestamp || ''}"`,
-          `"${sub.evaluatorName || ''}"`,
-          `"${sub.team1_name || 'EQUIPO 1'}"`,
-          sub.team1_score || 0,
-          `"${sub.team2_name || 'EQUIPO 2'}"`,
-          sub.team2_score || 0,
-          `"${sub.team3_name || 'EQUIPO 3'}"`,
-          sub.team3_score || 0,
-          `"${sub.team4_name || 'EQUIPO 4'}"`,
-          sub.team4_score || 0
-        ];
-        csvContent += row.join(",") + "\n";
-      });
-
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `Evaluaciones_Naturgy_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      showToast("Archivo CSV descargado exitosamente.", "success");
-    }
+    // Attach to global scope for module access
+    window.renderConsolidatedTable = renderConsolidatedTable;
 
     /**
      * Modal & Fullscreen Controls
