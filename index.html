@@ -16,6 +16,9 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- HTML5 QR Code Scanner Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
   <!-- Custom Styles for Tablet & Custom Scrollbars -->
   <style>
     body {
@@ -120,6 +123,18 @@
           <span id="cache-status-text">Guardado en caché</span>
         </div>
 
+        <!-- SUBMIT RESULTS BUTTON -->
+        <button onclick="openSubmitModal()" class="flex items-center space-x-2 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm rounded-lg shadow-md transition active:scale-95">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>Enviar Resultados</span>
+        </button>
+
+        <!-- CONSOLIDATED PANEL BUTTON -->
+        <button onclick="openConsolidatedModal()" title="Ver panel centralizado de jurados" class="p-2 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition border border-slate-200 active:scale-95 flex items-center space-x-1.5">
+          <i class="fa-solid fa-table-list text-naturgy-blue text-base"></i>
+          <span class="text-xs font-bold hidden lg:inline">Panel Jurados</span>
+        </button>
+
         <!-- Fullscreen Button -->
         <button id="btn-fullscreen" onclick="toggleFullScreen()" title="Pantalla Completa" class="p-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition border border-slate-200 active:scale-95">
           <i class="fa-solid fa-expand text-lg"></i>
@@ -130,13 +145,6 @@
           <i class="fa-solid fa-rotate-left"></i>
           <span class="hidden md:inline">Reiniciar</span>
         </button>
-
-        <!-- Summary / Export Modal Button -->
-        <button onclick="openSummaryModal()" class="flex items-center space-x-1.5 px-3.5 py-2 text-xs font-bold text-white bg-naturgy-orange hover:bg-amber-600 rounded-lg shadow-sm transition active:scale-95">
-          <i class="fa-solid fa-award text-sm"></i>
-          <span>Resultados</span>
-        </button>
-
       </div>
     </div>
   </header>
@@ -157,8 +165,8 @@
         <!-- Evaluator Name Input -->
         <div class="flex items-center space-x-2 bg-slate-50 p-2 rounded-lg border border-slate-200 self-start md:self-auto">
           <i class="fa-solid fa-user-pen text-slate-400 text-sm pl-1"></i>
-          <label for="evaluator-name" class="text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Jurado:</label>
-          <input type="text" id="evaluator-name" placeholder="Nombre del Evaluador" class="bg-transparent text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none w-36 sm:w-48" oninput="saveEvaluatorName(this.value)">
+          <label for="evaluator-name" class="text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Jurado <span class="text-rose-500 font-bold">*</span>:</label>
+          <input type="text" id="evaluator-name" placeholder="Tu Nombre Obligatorio" class="bg-transparent text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none w-36 sm:w-48 transition-all" oninput="saveEvaluatorName(this.value)">
         </div>
       </div>
 
@@ -186,7 +194,6 @@
                   <span id="team-name-0" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(0, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 1</span>
                   <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
                 </div>
-                <div id="badge-rank-0" class="mt-1 hidden"></div>
               </th>
 
               <!-- Team 2 Header -->
@@ -195,7 +202,6 @@
                   <span id="team-name-1" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(1, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 2</span>
                   <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
                 </div>
-                <div id="badge-rank-1" class="mt-1 hidden"></div>
               </th>
 
               <!-- Team 3 Header -->
@@ -204,7 +210,6 @@
                   <span id="team-name-2" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(2, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 3</span>
                   <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
                 </div>
-                <div id="badge-rank-2" class="mt-1 hidden"></div>
               </th>
 
               <!-- Team 4 Header -->
@@ -213,7 +218,6 @@
                   <span id="team-name-3" class="editable-team-name font-bold" contenteditable="true" onblur="updateTeamName(3, this.innerText)" onkeydown="preventEnterKey(event)">EQUIPO 4</span>
                   <i class="fa-solid fa-pen text-[10px] opacity-40 group-hover:opacity-100 cursor-pointer" title="Editar nombre"></i>
                 </div>
-                <div id="badge-rank-3" class="mt-1 hidden"></div>
               </th>
             </tr>
           </thead>
@@ -240,7 +244,6 @@
                     <span id="final-score-0" class="text-2xl font-black">0.00</span>
                     <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
                   </div>
-                  <span id="rank-subtext-0" class="text-[11px] font-bold uppercase tracking-wider text-amber-100 mt-0.5"></span>
                 </div>
               </td>
 
@@ -251,7 +254,6 @@
                     <span id="final-score-1" class="text-2xl font-black">0.00</span>
                     <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
                   </div>
-                  <span id="rank-subtext-1" class="text-[11px] font-bold uppercase tracking-wider text-amber-100 mt-0.5"></span>
                 </div>
               </td>
 
@@ -262,7 +264,6 @@
                     <span id="final-score-2" class="text-2xl font-black">0.00</span>
                     <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
                   </div>
-                  <span id="rank-subtext-2" class="text-[11px] font-bold uppercase tracking-wider text-amber-100 mt-0.5"></span>
                 </div>
               </td>
 
@@ -273,7 +274,6 @@
                     <span id="final-score-3" class="text-2xl font-black">0.00</span>
                     <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
                   </div>
-                  <span id="rank-subtext-3" class="text-[11px] font-bold uppercase tracking-wider text-amber-100 mt-0.5"></span>
                 </div>
               </td>
             </tr>
@@ -295,25 +295,15 @@
       </div>
     </div>
 
-    <!-- Evaluator Observations / Notes Section -->
-    <div class="mt-4 bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-      <label for="evaluator-notes" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center">
-        <i class="fa-regular fa-comment-dots text-naturgy-orange mr-1.5 text-sm"></i>
-        Observaciones Generales / Comentarios del Jurado:
-      </label>
-      <textarea id="evaluator-notes" rows="2" placeholder="Escriba aquí observaciones adicionales sobre el desempeño de los equipos..." class="w-full text-xs sm:text-sm p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-naturgy-blue focus:outline-none text-slate-700 resize-y" oninput="saveNotes(this.value)"></textarea>
-    </div>
-
   </main>
 
   <!-- Footer Branding -->
   <footer class="bg-slate-900 text-slate-400 text-xs py-3 px-4 mt-6 border-t border-slate-800">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
       <span class="font-semibold text-slate-300">Naturgy — Sistema de Evaluación de Equipos</span>
-      <span class="text-slate-500">Optimizado para Tablet & Web · Datos guardados automáticamente en caché local</span>
+      <span class="text-slate-500">Sincronización Multi-dispositivo & Envío Centralizado a Hoja de Cálculo</span>
     </div>
   </footer>
-
 
   <!-- MODAL 1: RESET CONFIRMATION -->
   <div id="modal-reset" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -374,6 +364,262 @@
   </div>
 
 
+  <!-- MODAL 3: ENVIAR RESULTADOS -->
+  <div id="modal-submit" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 relative">
+      <div class="flex items-center space-x-3 text-emerald-600 mb-4">
+        <div class="p-3 bg-emerald-100 rounded-full">
+          <i class="fa-solid fa-paper-plane text-xl"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Enviar Evaluación Final</h3>
+          <p class="text-xs text-slate-500">Se registrarán los puntajes en la Hoja de Cálculo Central</p>
+        </div>
+      </div>
+
+      <div id="submit-validation-msg" class="hidden mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 flex items-center space-x-2">
+        <i class="fa-solid fa-circle-exclamation text-amber-600 text-sm"></i>
+        <span id="submit-validation-text">Por favor ingrese su nombre como Jurado antes de enviar.</span>
+      </div>
+
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-6 space-y-2 text-xs text-slate-700">
+        <div class="flex justify-between">
+          <span class="font-bold">Jurado / Evaluador:</span>
+          <span id="submit-summary-evaluator" class="font-semibold text-naturgy-blue">No especificado</span>
+        </div>
+        <div class="flex justify-between border-t border-slate-200 pt-2">
+          <span class="font-bold">Resultados Ponderados:</span>
+        </div>
+        <div id="submit-summary-scores" class="grid grid-cols-2 gap-2 pt-1 font-medium">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <div id="submit-status-spinner" class="hidden flex flex-col items-center justify-center py-4 space-y-2">
+        <div class="w-8 h-8 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+        <span class="text-xs font-semibold text-slate-600">Transmitiendo datos a la Hoja de Cálculo...</span>
+      </div>
+
+      <div id="submit-modal-buttons" class="flex items-center justify-end space-x-3">
+        <button onclick="closeSubmitModal()" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition">
+          Cancelar
+        </button>
+        <button onclick="confirmSubmitResults()" class="px-5 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-md transition flex items-center space-x-2">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>Confirmar y Enviar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL 4: PANEL CONSOLIDADO & CONFIGURACIÓN GOOGLE SHEETS -->
+  <div id="modal-consolidated" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-100 overflow-hidden">
+      
+      <!-- Panel Header -->
+      <div class="bg-naturgy-blue text-white p-5 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <i class="fa-solid fa-database text-emerald-400 text-xl"></i>
+          <div>
+            <h3 class="text-lg font-black uppercase tracking-wide">Panel Centralizado de Jurados</h3>
+            <p class="text-xs text-slate-300">Envíos acumulados de todos los evaluadores</p>
+          </div>
+        </div>
+        <button onclick="closeConsolidatedModal()" class="text-slate-300 hover:text-white p-1 rounded-lg transition">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Config & Tabs Bar -->
+      <div class="bg-slate-100 border-b border-slate-200 px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center space-x-2">
+          <button onclick="switchPanelTab('results')" id="tab-btn-results" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-naturgy-blue shadow-sm border border-slate-200">
+            <i class="fa-solid fa-list-check mr-1"></i> Evaluaciones Recibidas
+          </button>
+          <button onclick="switchPanelTab('settings')" id="tab-btn-settings" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-white/60">
+            <i class="fa-solid fa-gear mr-1"></i> Configurar Google Sheets
+          </button>
+        </div>
+
+        <button onclick="exportConsolidatedToCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow-sm transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-file-excel"></i>
+          <span>Exportar a Excel / Google Sheets (CSV)</span>
+        </button>
+      </div>
+
+      <!-- Tab Content 1: Submissions Table -->
+      <div id="tab-content-results" class="p-6 overflow-y-auto flex-grow space-y-4">
+        
+        <!-- Live Averaged Podium Section across all Jurados -->
+        <div id="consolidated-ranking-container">
+          <!-- Rendered via JS -->
+        </div>
+
+        <div id="consolidated-list-container" class="overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-100 text-slate-800 font-bold uppercase border-b border-slate-200">
+              <tr>
+                <th class="p-3">Fecha / Hora</th>
+                <th class="p-3">Jurado</th>
+                <th class="p-3 text-center">Equipo 1</th>
+                <th class="p-3 text-center">Equipo 2</th>
+                <th class="p-3 text-center">Equipo 3</th>
+                <th class="p-3 text-center">Equipo 4</th>
+              </tr>
+            </thead>
+            <tbody id="consolidated-table-body" class="divide-y divide-slate-200">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Content 2: Google Sheets Setup Guide -->
+      <div id="tab-content-settings" class="p-6 overflow-y-auto flex-grow space-y-4 hidden text-xs text-slate-700">
+        
+        <!-- Webhook Configuration Section with QR Scanner & Generator -->
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-4">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <h4 class="font-bold text-amber-900 text-sm flex items-center space-x-2">
+                <i class="fa-solid fa-plug text-amber-600"></i>
+                <span>URL de Webhook de Google Sheets</span>
+              </h4>
+              <p class="text-amber-800 text-xs mt-0.5">
+                Ingresa la URL pegando el enlace manualmente o escaneando un código QR con la cámara de la tablet.
+              </p>
+            </div>
+            
+            <!-- Scanner Action Buttons -->
+            <div class="flex items-center space-x-2">
+              <button id="btn-start-qr" onclick="startQRScanner()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+                <i class="fa-solid fa-qrcode"></i>
+                <span>Escanear QR con Cámara</span>
+              </button>
+              <button id="btn-stop-qr" onclick="stopQRScanner()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-lg transition flex items-center space-x-1.5 shadow-sm hidden active:scale-95">
+                <i class="fa-solid fa-video-slash"></i>
+                <span>Detener Escáner</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Live Camera Video Feed for QR Scanning -->
+          <div id="qr-reader-wrapper" class="hidden flex flex-col items-center justify-center p-3 bg-slate-900 rounded-xl border-2 border-dashed border-amber-400">
+            <span class="text-amber-300 font-bold text-xs mb-2 flex items-center">
+              <i class="fa-solid fa-camera mr-1.5 animate-pulse"></i>
+              Apunta la cámara de la tablet al Código QR del Webhook
+            </span>
+            <div id="qr-reader" class="w-full max-w-sm rounded-lg overflow-hidden bg-black"></div>
+          </div>
+
+          <!-- Manual Link Input -->
+          <div class="space-y-1.5">
+            <label for="sheets-webhook-url" class="font-bold text-amber-950 text-xs uppercase">Enlace Webhook de Google Apps Script:</label>
+            <div class="flex gap-2">
+              <input type="url" id="sheets-webhook-url" placeholder="https://script.google.com/macros/s/.../exec" class="flex-grow p-2.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-naturgy-blue text-xs font-mono shadow-inner" oninput="updateQRPreview(this.value)">
+              <button onclick="saveSheetsWebhookUrl()" class="px-4 py-2 bg-naturgy-blue text-white font-bold rounded-lg hover:bg-blue-900 transition shrink-0 flex items-center space-x-1">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span>Guardar URL</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Share QR Box (Shows QR Code of saved URL for other tablets to scan) -->
+          <div id="qr-share-box" class="hidden pt-3 border-t border-amber-200/80 flex items-center justify-between bg-white/80 p-3 rounded-lg border border-amber-100">
+            <div class="space-y-1 max-w-[70%]">
+              <span class="font-bold text-slate-800 text-xs flex items-center">
+                <i class="fa-solid fa-share-nodes text-naturgy-blue mr-1.5"></i>
+                Código QR para vincular otros dispositivos
+              </span>
+              <p class="text-[11px] text-slate-500">Puedes mostrar este código QR en pantalla para configurar los demás dispositivos de los jurados al instante sin escribir nada.</p>
+            </div>
+            <div class="bg-white p-1.5 border border-slate-200 rounded-lg shadow-sm shrink-0">
+              <img id="qr-share-img" src="" alt="Código QR Webhook" class="w-20 h-20">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toast-notification" class="fixed bottom-5 right-5 z-50 hidden transition-all transform translate-y-2">
+    <div id="toast-content" class="px-4 py-3 rounded-xl shadow-xl font-bold text-xs flex items-center space-x-2 text-white bg-slate-800 border border-slate-700">
+      <i id="toast-icon" class="fa-solid fa-circle-info"></i>
+      <span id="toast-message">Notificación</span>
+    </div>
+  </div>
+
+
+  <!-- Firebase Integration & Webhook Logic Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Global Cloud State Setup
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'naturgy-eval-app';
+    let db = null;
+    let auth = null;
+    let submittedEvaluations = [];
+
+    try {
+      if (typeof __firebase_config !== 'undefined') {
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+        
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      }
+    } catch (err) {
+      console.warn("Modo local activo (Firebase no configurado):", err);
+    }
+
+    window.cloudDb = db;
+    window.cloudAppId = appId;
+
+    // Listen for Cloud Submissions across all devices
+    if (db) {
+      const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'evaluations');
+      onSnapshot(colRef, (snapshot) => {
+        submittedEvaluations = [];
+        snapshot.forEach(docSnap => {
+          submittedEvaluations.push({ id: docSnap.id, ...docSnap.data() });
+        });
+        // Sort newest first
+        submittedEvaluations.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        window.allSubmissions = submittedEvaluations;
+        renderConsolidatedTable();
+      }, (error) => {
+        console.warn("Error leyendo envíos de la nube:", error);
+      });
+    }
+
+    // Function to submit or overwrite payload in Firestore Cloud
+    window.saveEvaluationToCloud = async function(payload) {
+      if (!db) return false;
+      try {
+        // Document ID derived from evaluator name to automatically overwrite
+        const docId = payload.evaluatorName.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'evaluations', docId);
+        await setDoc(docRef, payload);
+        return true;
+      } catch (e) {
+        console.error("Error guardando en Firestore:", e);
+        return false;
+      }
+    };
+  </script>
+
   <!-- JavaScript Application Engine -->
   <script>
     // Evaluation Criteria Configuration according to the official matrix
@@ -386,6 +632,7 @@
     ];
 
     const LOCAL_STORAGE_KEY = 'naturgy_pauta_evaluacion_v1';
+    const WEBHOOK_URL_KEY = 'naturgy_sheets_webhook_url';
 
     // Initial State Template
     const DEFAULT_STATE = {
@@ -400,12 +647,154 @@
     };
 
     let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    window.allSubmissions = [];
+
+    // QR Code Scanner Object Reference
+    let html5QrScanner = null;
 
     window.addEventListener('DOMContentLoaded', () => {
       loadStateFromCache();
       renderTableBody();
       updateCalculations();
+
+      const webhookInput = document.getElementById('sheets-webhook-url');
+      if (webhookInput) {
+        const savedUrl = localStorage.getItem(WEBHOOK_URL_KEY) || '';
+        webhookInput.value = savedUrl;
+        updateQRPreview(savedUrl);
+      }
     });
+
+    /**
+     * Start Camera & Read Webhook URL QR Code
+     */
+    function startQRScanner() {
+      const readerWrapper = document.getElementById('qr-reader-wrapper');
+      const startBtn = document.getElementById('btn-start-qr');
+      const stopBtn = document.getElementById('btn-stop-qr');
+
+      if (!readerWrapper || !startBtn || !stopBtn) return;
+
+      readerWrapper.classList.remove('hidden');
+      startBtn.classList.add('hidden');
+      stopBtn.classList.remove('hidden');
+
+      if (typeof Html5Qrcode === 'undefined') {
+        showToast('Error cargando lector de código QR. Compruebe la conexión a internet.', 'error');
+        stopQRScanner();
+        return;
+      }
+
+      if (!html5QrScanner) {
+        html5QrScanner = new Html5Qrcode("qr-reader");
+      }
+
+      const qrSuccessCallback = (decodedText) => {
+        if (decodedText && (decodedText.startsWith('http://') || decodedText.startsWith('https://'))) {
+          const input = document.getElementById('sheets-webhook-url');
+          if (input) {
+            input.value = decodedText.trim();
+            saveSheetsWebhookUrl();
+            updateQRPreview(decodedText.trim());
+          }
+          showToast('¡Código QR escaneado y URL guardada con éxito!', 'success');
+          stopQRScanner();
+        } else {
+          showToast('El código QR escaneado no contiene una URL válida.', 'error');
+        }
+      };
+
+      const qrConfig = { fps: 10, qrbox: { width: 220, height: 220 } };
+
+      html5QrScanner.start({ facingMode: "environment" }, qrConfig, qrSuccessCallback)
+        .catch(() => {
+          html5QrScanner.start({ facingMode: "user" }, qrConfig, qrSuccessCallback)
+            .catch((err) => {
+              console.warn("No se pudo iniciar la cámara:", err);
+              showToast("No se pudo acceder a la cámara. Revisa los permisos en tu navegador.", "error");
+              stopQRScanner();
+            });
+        });
+    }
+
+    /**
+     * Stop Camera Scanner
+     */
+    function stopQRScanner() {
+      const readerWrapper = document.getElementById('qr-reader-wrapper');
+      const startBtn = document.getElementById('btn-start-qr');
+      const stopBtn = document.getElementById('btn-stop-qr');
+
+      if (html5QrScanner) {
+        html5QrScanner.stop().then(() => {
+          if (readerWrapper) readerWrapper.classList.add('hidden');
+          if (startBtn) startBtn.classList.remove('hidden');
+          if (stopBtn) stopBtn.classList.add('hidden');
+        }).catch((err) => {
+          console.warn("Error cerrando la cámara:", err);
+          if (readerWrapper) readerWrapper.classList.add('hidden');
+          if (startBtn) startBtn.classList.remove('hidden');
+          if (stopBtn) stopBtn.classList.add('hidden');
+        });
+      } else {
+        if (readerWrapper) readerWrapper.classList.add('hidden');
+        if (startBtn) startBtn.classList.remove('hidden');
+        if (stopBtn) stopBtn.classList.add('hidden');
+      }
+    }
+
+    function saveSheetsWebhookUrl() {
+      const url = document.getElementById('sheets-webhook-url').value.trim();
+      localStorage.setItem(WEBHOOK_URL_KEY, url);
+      updateQRPreview(url);
+      showToast('URL de Webhook guardada exitosamente.', 'success');
+    }
+
+    function updateQRPreview(url) {
+      const shareBox = document.getElementById('qr-share-box');
+      const shareImg = document.getElementById('qr-share-img');
+      if (!shareBox || !shareImg) return;
+
+      if (url && url.startsWith('http')) {
+        shareImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}`;
+        shareBox.classList.remove('hidden');
+      } else {
+        shareBox.classList.add('hidden');
+      }
+    }
+
+    /**
+     * Show UI Toast Notification (replaces alert)
+     */
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast-notification');
+      const toastContent = document.getElementById('toast-content');
+      const toastIcon = document.getElementById('toast-icon');
+      const toastMsg = document.getElementById('toast-message');
+
+      if (!toast) return;
+
+      toastMsg.innerText = message;
+      
+      if (type === 'success') {
+        toastContent.className = "px-4 py-3 rounded-xl shadow-xl font-bold text-xs flex items-center space-x-2 text-white bg-emerald-600 border border-emerald-500";
+        toastIcon.className = "fa-solid fa-circle-check text-base";
+      } else if (type === 'error') {
+        toastContent.className = "px-4 py-3 rounded-xl shadow-xl font-bold text-xs flex items-center space-x-2 text-white bg-rose-600 border border-rose-500";
+        toastIcon.className = "fa-solid fa-circle-xmark text-base";
+      } else {
+        toastContent.className = "px-4 py-3 rounded-xl shadow-xl font-bold text-xs flex items-center space-x-2 text-white bg-slate-800 border border-slate-700";
+        toastIcon.className = "fa-solid fa-circle-info text-base";
+      }
+
+      toast.classList.remove('hidden', 'translate-y-2');
+      toast.classList.add('translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-2');
+        setTimeout(() => toast.classList.add('hidden'), 200);
+      }, 3500);
+    }
 
     /**
      * Load state from browser localStorage if available
@@ -427,9 +816,6 @@
       // Restore evaluator name and notes input
       const evalInput = document.getElementById('evaluator-name');
       if (evalInput) evalInput.value = appState.evaluatorName || '';
-
-      const notesInput = document.getElementById('evaluator-notes');
-      if (notesInput) notesInput.value = appState.notes || '';
 
       // Restore team headers
       appState.teams.forEach((team, index) => {
@@ -520,7 +906,6 @@
      * Set score for a team & criterion
      */
     function setScore(teamIndex, criterionId, scoreValue) {
-      // Toggle off if same value tapped again
       if (appState.teams[teamIndex].scores[criterionId] === scoreValue) {
         appState.teams[teamIndex].scores[criterionId] = null;
       } else {
@@ -551,11 +936,10 @@
 
     function saveEvaluatorName(val) {
       appState.evaluatorName = val;
-      saveStateToCache();
-    }
-
-    function saveNotes(val) {
-      appState.notes = val;
+      const evalInput = document.getElementById('evaluator-name');
+      if (evalInput && val.trim()) {
+        evalInput.classList.remove('ring-2', 'ring-rose-500', 'bg-rose-50');
+      }
       saveStateToCache();
     }
 
@@ -563,7 +947,6 @@
      * Calculate total weighted scores and rank teams
      */
     function updateCalculations() {
-      // Calculate weighted scores for each team
       const computedTeams = appState.teams.map((team, index) => {
         let totalWeighted = 0;
         let isComplete = true;
@@ -581,13 +964,12 @@
           index: index,
           name: team.name,
           totalWeighted: parseFloat(totalWeighted.toFixed(2)),
-          c1Score: team.scores['c1'] || 0, // 1st Tie-breaker: Sabor y equilibrio
-          c2Score: team.scores['c2'] || 0, // 2nd Tie-breaker: Presentación y creatividad
+          c1Score: team.scores['c1'] || 0,
+          c2Score: team.scores['c2'] || 0,
           isComplete: isComplete
         };
       });
 
-      // Update total scores on table UI
       computedTeams.forEach(ct => {
         const scoreEl = document.getElementById(`final-score-${ct.index}`);
         if (scoreEl) {
@@ -595,54 +977,337 @@
         }
       });
 
-      // Sort teams to determine Ranking with Tie-breaker Rules
-      // Rule 1: Highest total weighted score
-      // Rule 2: Highest score in "Sabor y equilibrio" (c1)
-      // Rule 3: Highest score in "Presentación y creatividad" (c2)
       const sorted = [...computedTeams].sort((a, b) => {
         if (b.totalWeighted !== a.totalWeighted) {
           return b.totalWeighted - a.totalWeighted;
         }
         if (b.c1Score !== a.c1Score) {
-          return b.c1Score - a.c1Score; // Tie-breaker 1
+          return b.c1Score - a.c1Score;
         }
-        return b.c2Score - a.c2Score;   // Tie-breaker 2
+        return b.c2Score - a.c2Score;
       });
 
-      // Assign Rankings
       const ranks = {};
       sorted.forEach((teamObj, rankIndex) => {
         ranks[teamObj.index] = rankIndex + 1;
       });
 
-      // Update Rank Badges on Headers
-      computedTeams.forEach(ct => {
-        const rankPos = ranks[ct.index];
-        const badgeEl = document.getElementById(`badge-rank-${ct.index}`);
-        const subtextEl = document.getElementById(`rank-subtext-${ct.index}`);
+      return { computedTeams, sorted, ranks };
+    }
 
-        if (badgeEl && subtextEl) {
-          if (ct.totalWeighted > 0) {
-            let badgeColor = 'bg-slate-200 text-slate-800';
-            let label = `${rankPos}º Lugar`;
 
-            if (rankPos === 1) badgeColor = 'bg-amber-400 text-amber-950 font-black';
-            else if (rankPos === 2) badgeColor = 'bg-slate-300 text-slate-900 font-bold';
-            else if (rankPos === 3) badgeColor = 'bg-amber-700/80 text-amber-100 font-bold';
+    /**
+     * Submit Results Modal Controls
+     */
+    function openSubmitModal() {
+      const evalName = (appState.evaluatorName || '').trim();
+      const valMsg = document.getElementById('submit-validation-msg');
+      const valText = document.getElementById('submit-validation-text');
+      const evalLabel = document.getElementById('submit-summary-evaluator');
+      const scoresContainer = document.getElementById('submit-summary-scores');
 
-            badgeEl.className = `inline-block px-2 py-0.5 rounded-full text-[10px] uppercase font-bold shadow-sm ${badgeColor}`;
-            badgeEl.innerText = label;
-            badgeEl.classList.remove('hidden');
-
-            subtextEl.innerText = label;
-          } else {
-            badgeEl.classList.add('hidden');
-            subtextEl.innerText = '';
-          }
+      evalLabel.innerText = evalName || '⚠️ Obligatorio';
+      
+      if (!evalName) {
+        valText.innerText = "Debes ingresar tu nombre de Jurado en la parte superior antes de enviar.";
+        valMsg.classList.remove('hidden');
+        
+        const evalInput = document.getElementById('evaluator-name');
+        if (evalInput) {
+          evalInput.focus();
+          evalInput.classList.add('ring-2', 'ring-rose-500', 'bg-rose-50');
         }
+      } else {
+        valMsg.classList.add('hidden');
+      }
+
+      const { computedTeams } = updateCalculations();
+      scoresContainer.innerHTML = '';
+
+      computedTeams.forEach(ct => {
+        scoresContainer.innerHTML += `
+          <div class="bg-white p-2 rounded border border-slate-200 flex justify-between">
+            <span class="truncate">${ct.name}:</span>
+            <span class="font-extrabold text-naturgy-blue">${ct.totalWeighted.toFixed(2)} pts</span>
+          </div>
+        `;
       });
 
-      return { computedTeams, sorted, ranks };
+      document.getElementById('submit-status-spinner').classList.add('hidden');
+      document.getElementById('submit-modal-buttons').classList.remove('hidden');
+      document.getElementById('modal-submit').classList.remove('hidden');
+    }
+
+    function closeSubmitModal() {
+      document.getElementById('modal-submit').classList.add('hidden');
+    }
+
+    async function confirmSubmitResults() {
+      const evalName = (appState.evaluatorName || '').trim();
+      if (!evalName) {
+        openSubmitModal();
+        return;
+      }
+
+      const spinner = document.getElementById('submit-status-spinner');
+      const buttons = document.getElementById('submit-modal-buttons');
+
+      spinner.classList.remove('hidden');
+      buttons.classList.add('hidden');
+
+      const { computedTeams } = updateCalculations();
+      const payload = {
+        timestamp: new Date().toLocaleString('es-CL'),
+        evaluatorName: evalName,
+        team1_name: computedTeams[0].name,
+        team1_score: computedTeams[0].totalWeighted,
+        team2_name: computedTeams[1].name,
+        team2_score: computedTeams[1].totalWeighted,
+        team3_name: computedTeams[2].name,
+        team3_score: computedTeams[2].totalWeighted,
+        team4_name: computedTeams[3].name,
+        team4_score: computedTeams[3].totalWeighted,
+        rawScores: appState.teams
+      };
+
+      // 1. Send to Firestore Cloud Centralized Database (Overwrites by docId)
+      if (window.saveEvaluationToCloud) {
+        await window.saveEvaluationToCloud(payload);
+      }
+
+      // 2. Send to Google Sheets Webhook URL if configured
+      const webhookUrl = localStorage.getItem(WEBHOOK_URL_KEY);
+      if (webhookUrl && webhookUrl.startsWith('http')) {
+        try {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } catch (e) {
+          console.warn("Error enviando al Webhook de Google Sheets:", e);
+        }
+      }
+
+      // 3. Update local submissions buffer (Overwrite if evaluator exists)
+      const existingIdx = window.allSubmissions.findIndex(s => 
+        (s.evaluatorName || '').trim().toLowerCase() === evalName.toLowerCase()
+      );
+      if (existingIdx !== -1) {
+        window.allSubmissions[existingIdx] = payload;
+      } else {
+        window.allSubmissions.unshift(payload);
+      }
+      renderConsolidatedTable();
+
+      setTimeout(() => {
+        spinner.classList.add('hidden');
+        closeSubmitModal();
+        showToast(`✅ Evaluación de "${evalName}" registrada/sobrescrita con éxito`, 'success');
+      }, 800);
+    }
+
+    /**
+     * Consolidated Panel Controls
+     */
+    function openConsolidatedModal() {
+      renderConsolidatedTable();
+      document.getElementById('modal-consolidated').classList.remove('hidden');
+    }
+
+    function closeConsolidatedModal() {
+      stopQRScanner();
+      document.getElementById('modal-consolidated').classList.add('hidden');
+    }
+
+    function switchPanelTab(tab) {
+      const resultsTab = document.getElementById('tab-content-results');
+      const settingsTab = document.getElementById('tab-content-settings');
+      const btnResults = document.getElementById('tab-btn-results');
+      const btnSettings = document.getElementById('tab-btn-settings');
+
+      if (tab === 'results') {
+        resultsTab.classList.remove('hidden');
+        settingsTab.classList.add('hidden');
+        btnResults.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-naturgy-blue shadow-sm border border-slate-200";
+        btnSettings.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-white/60";
+      } else {
+        resultsTab.classList.add('hidden');
+        settingsTab.classList.remove('hidden');
+        btnSettings.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-naturgy-blue shadow-sm border border-slate-200";
+        btnResults.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-white/60";
+      }
+    }
+
+    function saveSheetsWebhookUrl() {
+      const url = document.getElementById('sheets-webhook-url').value.trim();
+      localStorage.setItem(WEBHOOK_URL_KEY, url);
+      showToast('URL de Webhook guardada exitosamente.', 'success');
+    }
+
+    function renderConsolidatedTable() {
+      const tbody = document.getElementById('consolidated-table-body');
+      const rankingContainer = document.getElementById('consolidated-ranking-container');
+      if (!tbody) return;
+
+      if (!window.allSubmissions || window.allSubmissions.length === 0) {
+        if (rankingContainer) {
+          rankingContainer.innerHTML = `
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-center text-slate-400 text-xs italic">
+              <i class="fa-solid fa-hourglass-start mr-2 text-slate-300"></i>
+              Aún no hay evaluaciones registradas. El podio promedio se calculará en cuanto se reciba el primer envío.
+            </div>
+          `;
+        }
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="p-6 text-center text-slate-400 italic">
+              No se han recibido evaluaciones todavía. Presiona "Enviar Resultados" para registrar la primera.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      // Calculate Averages across all submitted evaluations
+      const totalCount = window.allSubmissions.length;
+      const latestSub = window.allSubmissions[0];
+      
+      const teamStats = [
+        { id: 1, name: latestSub.team1_name || 'EQUIPO 1', totalScore: 0 },
+        { id: 2, name: latestSub.team2_name || 'EQUIPO 2', totalScore: 0 },
+        { id: 3, name: latestSub.team3_name || 'EQUIPO 3', totalScore: 0 },
+        { id: 4, name: latestSub.team4_name || 'EQUIPO 4', totalScore: 0 }
+      ];
+
+      window.allSubmissions.forEach(sub => {
+        teamStats[0].totalScore += Number(sub.team1_score || 0);
+        teamStats[1].totalScore += Number(sub.team2_score || 0);
+        teamStats[2].totalScore += Number(sub.team3_score || 0);
+        teamStats[3].totalScore += Number(sub.team4_score || 0);
+      });
+
+      teamStats.forEach(t => {
+        t.avgScore = parseFloat((t.totalScore / totalCount).toFixed(2));
+      });
+
+      // Sort teams by average score descending
+      const sortedTeams = [...teamStats].sort((a, b) => b.avgScore - a.avgScore);
+
+      // Render Real-time Averaged Podium Section
+      if (rankingContainer) {
+        let rankingHtml = `
+          <div class="bg-gradient-to-r from-slate-900 via-naturgy-blue to-slate-900 text-white rounded-xl p-4 shadow-md border border-slate-700">
+            <div class="flex items-center justify-between mb-3 border-b border-slate-700/60 pb-2.5">
+              <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-trophy text-amber-400 text-lg"></i>
+                <h4 class="font-extrabold text-xs uppercase tracking-wider text-amber-300">Promedio Consolidado del Jurado (Tiempo Real)</h4>
+              </div>
+              <span class="bg-emerald-500/20 text-emerald-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30 flex items-center">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+                ${totalCount} ${totalCount === 1 ? 'Jurado Registrado' : 'Jurados Registrados'}
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        `;
+
+        sortedTeams.forEach((team, idx) => {
+          const rank = idx + 1;
+          let badgeClass = 'bg-slate-700 text-slate-300 border-slate-600';
+          let trophyIcon = 'fa-medal text-slate-400';
+          let borderGlow = 'border-slate-700/50 bg-slate-800/60';
+
+          if (rank === 1) {
+            badgeClass = 'bg-amber-400 text-amber-950 font-black';
+            trophyIcon = 'fa-trophy text-amber-400';
+            borderGlow = 'border-amber-400/50 bg-amber-500/10 ring-1 ring-amber-400/20';
+          } else if (rank === 2) {
+            badgeClass = 'bg-slate-300 text-slate-900 font-bold';
+            trophyIcon = 'fa-medal text-slate-300';
+            borderGlow = 'border-slate-400/40 bg-slate-400/10';
+          } else if (rank === 3) {
+            badgeClass = 'bg-amber-700 text-amber-100 font-bold';
+            trophyIcon = 'fa-award text-amber-600';
+            borderGlow = 'border-amber-700/40 bg-amber-700/10';
+          }
+
+          rankingHtml += `
+            <div class="p-3 rounded-lg border ${borderGlow} flex flex-col justify-between relative overflow-hidden">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${rank}º Lugar</span>
+                <i class="fa-solid ${trophyIcon} text-sm"></i>
+              </div>
+              <div class="font-extrabold text-sm text-white truncate" title="${team.name}">${team.name}</div>
+              <div class="mt-2 text-right">
+                <span class="text-xl font-black text-amber-400">${team.avgScore.toFixed(2)}</span>
+                <span class="text-[10px] text-slate-400 font-semibold">/ 5.0</span>
+              </div>
+            </div>
+          `;
+        });
+
+        rankingHtml += `
+            </div>
+          </div>
+        `;
+        rankingContainer.innerHTML = rankingHtml;
+      }
+
+      // Render Submissions History Table
+      tbody.innerHTML = '';
+      window.allSubmissions.forEach(sub => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 border-b border-slate-100";
+        tr.innerHTML = `
+          <td class="p-3 text-slate-500">${sub.timestamp || '-'}</td>
+          <td class="p-3 font-bold text-slate-800">${sub.evaluatorName || 'Jurado Anónimo'}</td>
+          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team1_score !== undefined ? sub.team1_score.toFixed(2) : '-'}</td>
+          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team2_score !== undefined ? sub.team2_score.toFixed(2) : '-'}</td>
+          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team3_score !== undefined ? sub.team3_score.toFixed(2) : '-'}</td>
+          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team4_score !== undefined ? sub.team4_score.toFixed(2) : '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /**
+     * Export All Submissions to CSV for Excel / Google Sheets
+     */
+    function exportConsolidatedToCSV() {
+      if (!window.allSubmissions || window.allSubmissions.length === 0) {
+        showToast("No hay envíos registrados para exportar.", "error");
+        return;
+      }
+
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Fecha,Jurado,Equipo 1,Puntaje Eq 1,Equipo 2,Puntaje Eq 2,Equipo 3,Puntaje Eq 3,Equipo 4,Puntaje Eq 4\n";
+
+      window.allSubmissions.forEach(sub => {
+        const row = [
+          `"${sub.timestamp || ''}"`,
+          `"${sub.evaluatorName || ''}"`,
+          `"${sub.team1_name || 'EQUIPO 1'}"`,
+          sub.team1_score || 0,
+          `"${sub.team2_name || 'EQUIPO 2'}"`,
+          sub.team2_score || 0,
+          `"${sub.team3_name || 'EQUIPO 3'}"`,
+          sub.team3_score || 0,
+          `"${sub.team4_name || 'EQUIPO 4'}"`,
+          sub.team4_score || 0
+        ];
+        csvContent += row.join(",") + "\n";
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Evaluaciones_Naturgy_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Archivo CSV descargado exitosamente.", "success");
     }
 
     /**
@@ -661,10 +1326,10 @@
       localStorage.removeItem(LOCAL_STORAGE_KEY);
       
       const evalInput = document.getElementById('evaluator-name');
-      if (evalInput) evalInput.value = '';
-
-      const notesInput = document.getElementById('evaluator-notes');
-      if (notesInput) notesInput.value = '';
+      if (evalInput) {
+        evalInput.value = '';
+        evalInput.classList.remove('ring-2', 'ring-rose-500', 'bg-rose-50');
+      }
 
       appState.teams.forEach((team, index) => {
         const nameEl = document.getElementById(`team-name-${index}`);
@@ -675,6 +1340,7 @@
       renderTableBody();
       updateCalculations();
       showCacheNotification('Evaluación reiniciada');
+      showToast('Evaluación reiniciada correctamente.');
     }
 
     function openSummaryModal() {
