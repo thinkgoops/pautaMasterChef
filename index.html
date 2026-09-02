@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Pauta de Evaluación de Equipos - Naturgy</title>
+  <title>Pauta de Evaluación de Equipos - La Mezcla Perfecta 🍰</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -92,11 +92,8 @@
       <div class="flex items-center space-x-3">
         <div class="flex flex-col">
           <div class="flex items-center space-x-2">
-            <!-- Naturgy Logo Text Representation -->
-            <span class="text-2xl font-black tracking-tight text-naturgy-blue">Naturgy</span>
-            <svg class="w-6 h-6 text-naturgy-orange" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L15 8L22 9L17 14L18.5 21L12 17.5L5.5 21L7 14L2 9L9 8L12 2Z" />
-            </svg>
+            <!-- Logo Text Representation -->
+            <span class="text-2xl font-black tracking-tight text-naturgy-blue">La Mezcla Perfecta 🍰</span>
           </div>
           <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Pauta del Jurado</span>
         </div>
@@ -168,28 +165,36 @@
     <!-- Table Wrapper -->
     <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden mb-6">
       <div class="overflow-x-auto">
-        <table class="w-full eval-table border-collapse min-w-[768px]">
+        <table class="w-full eval-table border-collapse min-w-[900px]">
           
           <!-- Table Header -->
           <thead>
             <tr class="bg-naturgy-blue text-white text-xs sm:text-sm tracking-wide">
               <th class="py-3.5 px-4 text-left font-bold w-1/4 uppercase">CRITERIO</th>
-              <th class="py-3.5 px-3 text-center font-bold w-20 uppercase">PESO</th>
+              <th class="py-3.5 px-3 text-center font-bold w-16 uppercase">PESO</th>
               
-              <th class="py-3.5 px-3 text-center font-bold w-1/5">
+              <th class="py-3.5 px-2 text-center font-bold">
                 <span id="team-name-0" class="font-bold">EQUIPO 1</span>
               </th>
 
-              <th class="py-3.5 px-3 text-center font-bold w-1/5">
+              <th class="py-3.5 px-2 text-center font-bold">
                 <span id="team-name-1" class="font-bold">EQUIPO 2</span>
               </th>
 
-              <th class="py-3.5 px-3 text-center font-bold w-1/5">
+              <th class="py-3.5 px-2 text-center font-bold">
                 <span id="team-name-2" class="font-bold">EQUIPO 3</span>
               </th>
 
-              <th class="py-3.5 px-3 text-center font-bold w-1/5">
+              <th class="py-3.5 px-2 text-center font-bold">
                 <span id="team-name-3" class="font-bold">EQUIPO 4</span>
+              </th>
+
+              <th class="py-3.5 px-2 text-center font-bold">
+                <span id="team-name-4" class="font-bold">EQUIPO 5</span>
+              </th>
+
+              <th class="py-3.5 px-2 text-center font-bold">
+                <span id="team-name-5" class="font-bold">EQUIPO 6</span>
               </th>
             </tr>
           </thead>
@@ -210,7 +215,7 @@
               </td>
               
               <!-- Team 1 Final Weighted Score -->
-              <td class="py-4 px-3 text-center bg-amber-600/20">
+              <td class="py-4 px-2 text-center bg-amber-600/20">
                 <div class="flex flex-col items-center justify-center">
                   <div class="text-lg sm:text-xl tracking-tight">
                     <span id="final-score-0" class="text-2xl font-black">0.00</span>
@@ -220,7 +225,7 @@
               </td>
 
               <!-- Team 2 Final Weighted Score -->
-              <td class="py-4 px-3 text-center bg-amber-600/20">
+              <td class="py-4 px-2 text-center bg-amber-600/20">
                 <div class="flex flex-col items-center justify-center">
                   <div class="text-lg sm:text-xl tracking-tight">
                     <span id="final-score-1" class="text-2xl font-black">0.00</span>
@@ -230,7 +235,7 @@
               </td>
 
               <!-- Team 3 Final Weighted Score -->
-              <td class="py-4 px-3 text-center bg-amber-600/20">
+              <td class="py-4 px-2 text-center bg-amber-600/20">
                 <div class="flex flex-col items-center justify-center">
                   <div class="text-lg sm:text-xl tracking-tight">
                     <span id="final-score-2" class="text-2xl font-black">0.00</span>
@@ -240,10 +245,30 @@
               </td>
 
               <!-- Team 4 Final Weighted Score -->
-              <td class="py-4 px-3 text-center bg-amber-600/20">
+              <td class="py-4 px-2 text-center bg-amber-600/20">
                 <div class="flex flex-col items-center justify-center">
                   <div class="text-lg sm:text-xl tracking-tight">
                     <span id="final-score-3" class="text-2xl font-black">0.00</span>
+                    <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Team 5 Final Weighted Score -->
+              <td class="py-4 px-2 text-center bg-amber-600/20">
+                <div class="flex flex-col items-center justify-center">
+                  <div class="text-lg sm:text-xl tracking-tight">
+                    <span id="final-score-4" class="text-2xl font-black">0.00</span>
+                    <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Team 6 Final Weighted Score -->
+              <td class="py-4 px-2 text-center bg-amber-600/20">
+                <div class="flex flex-col items-center justify-center">
+                  <div class="text-lg sm:text-xl tracking-tight">
+                    <span id="final-score-5" class="text-2xl font-black">0.00</span>
                     <span class="text-xs sm:text-sm font-semibold opacity-90">/ 5.0</span>
                   </div>
                 </div>
@@ -260,7 +285,7 @@
   <!-- Footer Branding -->
   <footer class="bg-slate-900 text-slate-400 text-xs py-3 px-4 mt-6 border-t border-slate-800">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
-      <span class="font-semibold text-slate-300">Naturgy — Sistema de Evaluación de Equipos</span>
+      <span class="font-semibold text-slate-300">La Mezcla Perfecta 🍰 — Sistema de Evaluación de Equipos</span>
       <span class="text-slate-500">Sincronización Multi-dispositivo & Envío Centralizado</span>
     </div>
   </footer>
@@ -420,6 +445,8 @@
                 <th class="p-3 text-center">Equipo 2</th>
                 <th class="p-3 text-center">Equipo 3</th>
                 <th class="p-3 text-center">Equipo 4</th>
+                <th class="p-3 text-center">Equipo 5</th>
+                <th class="p-3 text-center">Equipo 6</th>
               </tr>
             </thead>
             <tbody id="consolidated-table-body" class="divide-y divide-slate-200">
@@ -509,40 +536,7 @@
 
   <!-- JavaScript Application Engine -->
   <script>
-    // URL Webhook de Google Sheets integrada directamente
     const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwXx5JJnJXEvDK-aO-lD32Qi4ns6843mHp0nM6FMMBTa3qRgIqdl9neyqWxF61XUCvT/exec';
-
-    // Evaluation Criteria Configuration
-    const CRITERIA = [
-      { id: 'c1', name: 'Sabor y equilibrio', weight: 0.30, displayWeight: '30%' },
-      { id: 'c2', name: 'Presentación y creatividad', weight: 0.25, displayWeight: '25%' },
-      { id: 'c3', name: 'Uso estratégico de recursos', weight: 0.20, displayWeight: '20%' },
-      { id: 'c4', name: 'Relato estratégico', weight: 0.15, displayWeight: '15%' },
-      { id: 'c5', name: 'Trabajo en equipo', weight: 0.10, displayWeight: '10%' }
-    ];
-
-    const LOCAL_STORAGE_KEY = 'naturgy_pauta_evaluacion_v1';
-
-    // Initial State Template
-    const DEFAULT_STATE = {
-      evaluatorName: '',
-      notes: '',
-      teams: [
-        { id: 0, name: 'EQUIPO 1', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
-        { id: 1, name: 'EQUIPO 2', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
-        { id: 2, name: 'EQUIPO 3', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
-        { id: 3, name: 'EQUIPO 4', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } }
-      ]
-    };
-
-    let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
-    window.allSubmissions = [];
-
-    window.addEventListener('DOMContentLoaded', () => {
-      loadStateFromCache();
-      renderTableBody();
-      updateCalculations();
-    });
 
     /**
      * Show UI Toast Notification
@@ -576,16 +570,46 @@
         setTimeout(() => toast.classList.add('hidden'), 200);
       }, 3500);
     }
+    window.showToast = showToast;
 
-    /**
-     * Load state from browser localStorage if available
-     */
+    const CRITERIA = [
+      { id: 'c1', name: 'Sabor y equilibrio', weight: 0.30, displayWeight: '30%' },
+      { id: 'c2', name: 'Presentación y creatividad', weight: 0.25, displayWeight: '25%' },
+      { id: 'c3', name: 'Uso estratégico de recursos', weight: 0.20, displayWeight: '20%' },
+      { id: 'c4', name: 'Relato estratégico', weight: 0.15, displayWeight: '15%' },
+      { id: 'c5', name: 'Trabajo en equipo', weight: 0.10, displayWeight: '10%' }
+    ];
+
+    const LOCAL_STORAGE_KEY = 'naturgy_pauta_evaluacion_v1';
+
+    const DEFAULT_STATE = {
+      evaluatorName: '',
+      notes: '',
+      teams: [
+        { id: 0, name: 'EQUIPO 1', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
+        { id: 1, name: 'EQUIPO 2', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
+        { id: 2, name: 'EQUIPO 3', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
+        { id: 3, name: 'EQUIPO 4', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
+        { id: 4, name: 'EQUIPO 5', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } },
+        { id: 5, name: 'EQUIPO 6', scores: { c1: null, c2: null, c3: null, c4: null, c5: null } }
+      ]
+    };
+
+    let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    window.allSubmissions = [];
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadStateFromCache();
+      renderTableBody();
+      updateCalculations();
+    });
+
     function loadStateFromCache() {
       try {
         const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (cached) {
           const parsed = JSON.parse(cached);
-          if (parsed && parsed.teams && parsed.teams.length === 4) {
+          if (parsed && parsed.teams && parsed.teams.length === 6) {
             appState = parsed;
             showCacheNotification('Datos recuperados de caché');
           }
@@ -822,19 +846,21 @@
         team1_score: computedTeams[0].totalWeighted,
         team2_name: computedTeams[1].name,
         team2_score: computedTeams[1].totalWeighted,
-        team3_name: computedTeams[3] ? computedTeams[2].name : 'EQUIPO 3',
+        team3_name: computedTeams[2].name,
         team3_score: computedTeams[2].totalWeighted,
-        team4_name: computedTeams[3] ? computedTeams[3].name : 'EQUIPO 4',
+        team4_name: computedTeams[3].name,
         team4_score: computedTeams[3].totalWeighted,
+        team5_name: computedTeams[4] ? computedTeams[4].name : 'EQUIPO 5',
+        team5_score: computedTeams[4] ? computedTeams[4].totalWeighted : 0,
+        team6_name: computedTeams[5] ? computedTeams[5].name : 'EQUIPO 6',
+        team6_score: computedTeams[5] ? computedTeams[5].totalWeighted : 0,
         rawScores: appState.teams
       };
 
-      // 1. Send to Firestore Cloud Centralized Database
       if (window.saveEvaluationToCloud) {
         await window.saveEvaluationToCloud(payload);
       }
 
-      // 2. Send to Integrated Google Sheets Webhook URL
       if (GOOGLE_SHEETS_WEBHOOK_URL && GOOGLE_SHEETS_WEBHOOK_URL.startsWith('http')) {
         try {
           await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
@@ -848,7 +874,6 @@
         }
       }
 
-      // 3. Update local submissions buffer
       const existingIdx = window.allSubmissions.findIndex(s => 
         (s.evaluatorName || '').trim().toLowerCase() === evalName.toLowerCase()
       );
@@ -936,13 +961,13 @@
           rankingContainer.innerHTML = `
             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-center text-slate-400 text-xs italic">
               <i class="fa-solid fa-hourglass-start mr-2 text-slate-300"></i>
-              Aún no hay evaluaciones registradas. El podio promedio se calculará en cuanto se reciba el primer envío.
+              Aún no hay evaluaciones registradas. El acumulado total se calculará en cuanto se reciba el primer envío.
             </div>
           `;
         }
         tbody.innerHTML = `
           <tr>
-            <td colspan="6" class="p-6 text-center text-slate-400 italic">
+            <td colspan="8" class="p-6 text-center text-slate-400 italic">
               No se han recibido evaluaciones todavía. Presiona "Enviar Resultados" para registrar la primera.
             </td>
           </tr>
@@ -957,7 +982,9 @@
         { id: 1, name: latestSub.team1_name || 'EQUIPO 1', totalScore: 0 },
         { id: 2, name: latestSub.team2_name || 'EQUIPO 2', totalScore: 0 },
         { id: 3, name: latestSub.team3_name || 'EQUIPO 3', totalScore: 0 },
-        { id: 4, name: latestSub.team4_name || 'EQUIPO 4', totalScore: 0 }
+        { id: 4, name: latestSub.team4_name || 'EQUIPO 4', totalScore: 0 },
+        { id: 5, name: latestSub.team5_name || 'EQUIPO 5', totalScore: 0 },
+        { id: 6, name: latestSub.team6_name || 'EQUIPO 6', totalScore: 0 }
       ];
 
       window.allSubmissions.forEach(sub => {
@@ -965,27 +992,27 @@
         teamStats[1].totalScore += Number(sub.team2_score || 0);
         teamStats[2].totalScore += Number(sub.team3_score || 0);
         teamStats[3].totalScore += Number(sub.team4_score || 0);
+        teamStats[4].totalScore += Number(sub.team5_score || 0);
+        teamStats[5].totalScore += Number(sub.team6_score || 0);
       });
 
       teamStats.forEach(t => {
-        t.avgScore = parseFloat((t.totalScore / totalCount).toFixed(2));
+        t.totalScore = parseFloat(t.totalScore.toFixed(2));
       });
 
-      // Calculate ranks based on scores
-      const sortedForRank = [...teamStats].sort((a, b) => b.avgScore - a.avgScore);
+      const sortedForRank = [...teamStats].sort((a, b) => b.totalScore - a.totalScore);
       const ranksMap = {};
       sortedForRank.forEach((team, idx) => {
         ranksMap[team.id] = idx + 1;
       });
 
-      // Render Real-time Averaged Podium Section with FIXED order (Equipo 1, 2, 3, 4)
       if (rankingContainer) {
         let rankingHtml = `
           <div class="bg-gradient-to-r from-slate-900 via-naturgy-blue to-slate-900 text-white rounded-xl p-4 shadow-md border border-slate-700">
             <div class="flex items-center justify-between mb-3 border-b border-slate-700/60 pb-2.5">
               <div class="flex items-center space-x-2">
                 <i class="fa-solid fa-trophy text-amber-400 text-lg"></i>
-                <h4 class="font-extrabold text-xs uppercase tracking-wider text-amber-300">Promedio Consolidado del Jurado (Tiempo Real)</h4>
+                <h4 class="font-extrabold text-xs uppercase tracking-wider text-amber-300">Puntaje Total Acumulado del Jurado (Tiempo Real)</h4>
               </div>
               <span class="bg-emerald-500/20 text-emerald-300 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30 flex items-center">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
@@ -993,7 +1020,7 @@
               </span>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3">
         `;
 
         teamStats.forEach((team) => {
@@ -1017,15 +1044,15 @@
           }
 
           rankingHtml += `
-            <div class="p-3 rounded-lg border ${borderGlow} flex flex-col justify-between relative overflow-hidden">
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${rank}º Lugar</span>
-                <i class="fa-solid ${trophyIcon} text-sm"></i>
+            <div class="p-2.5 rounded-lg border ${borderGlow} flex flex-col justify-between relative overflow-hidden">
+              <div class="flex items-center justify-between mb-1">
+                <span class="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] ${badgeClass}">${rank}º Lugar</span>
+                <i class="fa-solid ${trophyIcon} text-xs"></i>
               </div>
-              <div class="font-extrabold text-sm text-white truncate" title="${team.name}">${team.name}</div>
-              <div class="mt-2 text-right">
-                <span class="text-xl font-black text-amber-400">${team.avgScore.toFixed(2)}</span>
-                <span class="text-[10px] text-slate-400 font-semibold">/ 5.0</span>
+              <div class="font-extrabold text-xs sm:text-sm text-white truncate" title="${team.name}">${team.name}</div>
+              <div class="mt-1.5 text-right">
+                <span class="text-lg sm:text-xl font-black text-amber-400">${team.totalScore.toFixed(2)}</span>
+                <span class="text-[9px] sm:text-[10px] text-slate-400 font-semibold">pts</span>
               </div>
             </div>
           `;
@@ -1038,7 +1065,6 @@
         rankingContainer.innerHTML = rankingHtml;
       }
 
-      // Render Submissions History Table
       tbody.innerHTML = '';
       window.allSubmissions.forEach(sub => {
         const tr = document.createElement('tr');
@@ -1050,6 +1076,8 @@
           <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team2_score !== undefined ? Number(sub.team2_score).toFixed(2) : '-'}</td>
           <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team3_score !== undefined ? Number(sub.team3_score).toFixed(2) : '-'}</td>
           <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team4_score !== undefined ? Number(sub.team4_score).toFixed(2) : '-'}</td>
+          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team5_score !== undefined ? Number(sub.team5_score).toFixed(2) : '-'}</td>
+          <td class="p-3 text-center font-semibold text-naturgy-blue">${sub.team6_score !== undefined ? Number(sub.team6_score).toFixed(2) : '-'}</td>
         `;
         tbody.appendChild(tr);
       });
